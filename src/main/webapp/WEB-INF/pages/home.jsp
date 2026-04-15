@@ -1,10 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page import="com.islington.model.User" %>
 
 <!DOCTYPE html>
 <html>
 <head>
-  <title>My Project</title>
-  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/style.css" />
+  <title>Home</title>
+  <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/home.css" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -45,14 +46,22 @@
 			</ul>
 		</div>
 	
-		<!-- login/signup/Right Side -->
-		<div class="nav-buttons">
-			<a href="<%=request.getContextPath()%>/loginpage" class="login-btn">
-				Login
+		<!-- Right Side: Cart + Profile -->
+		<div class="nav-icons">
+			<a href="<%=request.getContextPath()%>/cartpage" class="cart-btn" title="Cart">
+				<img src="<%=request.getContextPath()%>/images/cart-svgrepo-com.svg" alt="cart" width="20px" height="20px">
 			</a>
-			<a href="<%=request.getContextPath()%>/signuppage" class="signup-btn">
-				Signup
-			</a>
+		</div>
+		<div class="profile-wrapper">
+			<button class="icon-btn" onclick="toggleProfileMenu()">
+				<img src="<%=request.getContextPath()%>/images/profile-about-mobile-ui-svgrepo-com.svg" alt="profile" width="20px" height="20px">
+			</button>
+			<div class="profile-dropdown" id="profileDropdown">
+				<p class="profile-dropdown-name"><%= user.getUsername() %></p>
+				<a href="<%=request.getContextPath()%>/profilepage">My Profile</a>
+                <a href="<%=request.getContextPath()%>/orderspage">My Orders</a>
+                <a href="<%=request.getContextPath()%>/logoutpage">Logout</a>
+			</div>
 		</div>
 	</nav>
    	<!-- Slider Section -->

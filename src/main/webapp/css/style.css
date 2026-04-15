@@ -1,0 +1,352 @@
+@charset "UTF-8";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-style: italic;
+}
+
+nav {
+	position: fixed;
+    top: 16px;
+    left: 16px;
+    right: 16px;
+    background: transparent;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 5px 28px;
+	height: 64px;
+	border-radius: 14px;
+	box-sizing: border-box;
+	max-width: 100%;
+	z-index: 100;
+	transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.nav-links ul {
+	display: flex;
+	list-style: none;
+	gap: 32px;
+	margin: 0;
+	padding: 0;
+}
+
+.nav-links a {
+	text-decoration: none;
+	color: rgba(236, 243, 158, 0.75);	
+	font-size: 15px;
+	font-weight: 500;
+	align-items: center;
+	display: flex;
+	gap: 6px;
+}
+
+.nav-links a.active {
+	color: #ECF39E;
+	border-bottom: 2px solid #A39B00;
+	padding-bottom: 2px;
+}
+
+.nav-link a:hover {
+	color: #ECF39E;
+}
+
+.nav-links a img {
+  filter: brightness(0) invert(1);
+  opacity: 0.75;
+  width: 18px;
+  height: 18px;
+}
+
+.nav-links a:hover img,
+.nav-links a.active img {
+  opacity: 1;
+  filter: brightness(0) saturate(100%) invert(91%) sepia(28%) saturate(500%) hue-rotate(25deg);
+}
+
+.login-btn{
+	display: inline-block;
+	padding: 7px 20px;
+	border: 1.5px solid rgba(236, 243, 158, 0.5);
+	background: transparent;
+	color: #ECF39E;
+	border-radius: 8px;
+	font-size: 15px;
+	font-weight: 500;
+	text-decoration: none;
+}
+
+.signup-btn {
+	padding: 8px 22px;
+	text-decoration: none;
+	border: none;
+	font-size: 15px;
+	font-weight: 500;
+	display: inline-block;
+	border-radius: 8px;
+	background: #A39B00;
+	color: #fff;
+}
+
+.slider {
+	position: relative;
+	height: 750px;
+	background-size: cover;
+	background-position:center;	
+	margin-top: 10px;
+	padding-top: 80px;
+	
+}
+
+.slider-text {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	color: white;
+}
+
+.slider-bottom {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+}
+
+.slider-bottom img {
+	width: 100%;
+	display: block;
+}
+
+/* ── Experience Section ── */
+.experience {
+	display: flex;
+	flex-direction: row;
+  	gap: 60px;
+  	padding: 80px 60px;
+  	background-color: #f5f0e8;   /* warm cream */
+  	align-items: flex-start;
+  	width:100%;
+  	box-sizing: border-box; 
+}
+
+.experience-deco {
+  	position: absolute;
+  	top: 0;
+  	left: 0;
+  	width: 220px;
+  	opacity: 0.4;
+  	z-index: 0;
+  	pointer-events: none;
+}
+
+/* LEFT column */
+.experience-left {
+  	flex: 1;
+  	min-width: 0;
+  	display: flex;
+  	flex-direction: column;
+  	position: relative;
+}
+
+.experience-label {
+  	position: relative;
+  	z-index: 1;
+  	font-family: 'Playfair Display', serif;
+  	font-size: 12px;
+  	font-weight: 400;
+  	font-style: normal;
+  	letter-spacing: 4px;
+  	color: #9b7c4a;              /* warm gold-brown */
+  	text-transform: uppercase;
+  	margin-bottom: 12px;
+  	margin-top: 10px;
+}
+
+.experience-heading {
+  	position: relative;
+  	z-index: 1;
+  	font-family: 'Playfair Display', serif;
+  	font-size: clamp(36px, 4vw, 56px);
+  	font-weight: 400;
+  	font-style: normal;
+  	color: #2e2a22;
+  	line-height: 1.15;
+  	margin-bottom: 32px;
+}
+
+.experience-left-img img {
+  	width: 100%;
+  	height: 420px;
+  	object-fit: cover;
+  	display: block;
+}
+
+/* RIGHT column */
+.experience-right {
+  	flex: 1;
+  	display: flex;
+  	flex-direction: column;
+  	padding-top: 20px;
+}
+
+.experience-photo {
+	width: 100%;
+  	height: 340px;
+  	object-fit: cover;
+  	display: block;
+  	margin-bottom: 28px;
+}
+
+.experience-desc {
+  	font-family: 'Playfair Display', serif;
+  	font-size: 15px;
+  	font-weight: 400;
+  	font-style: normal;
+  	color: #4a4035;
+  	line-height: 1.75;
+  	max-width: 360px;
+  	margin-bottom: 20px;
+}
+
+.experience-link {
+  	font-family: 'Playfair Display', serif;
+  	font-size: 14px;
+  	font-weight: 600;
+  	font-style: normal;
+  	color: #90A955;
+  	text-decoration: none;
+  	letter-spacing: 0.5px;
+}
+
+.experience-link:hover {
+  	text-decoration: underline;
+}
+
+nav.scrolled {
+	background: rgba(45, 50, 33, 0.97);  /* Deep Forest #2D3220 */
+	backdrop-filter: blur(8px);
+}
+
+nav.hidden {
+	transform: translateY(-120px);  /* slides fully off screen */
+}
+
+/* Product Section*/
+
+.products {
+	position: relative;
+	display: flex;
+	align-items: center;
+	background-color: #f0ece4;
+	padding: 60px 80px;
+	min-height: 520px;
+	overflow: hidden;
+}
+
+.product-slide {
+	display: none;
+	flex: 1;
+	align-items: center;
+	gap: 80px;
+	width: 100%;
+}
+
+.product-slide.active {
+	display: flex;
+}
+
+.product-image {
+	flex: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.product-image img {
+	max-height: 400px;
+	object-fit: contain;
+	display: block;
+}
+
+.product-category {
+	font-family: 'Playfair Display', serif;
+	font-size: 12px;
+	font-weight: 400;
+	font-style: normal;
+	letter-spacing: 4px;
+	color: #9b7c4a;
+	text-transform: uppercase;
+}
+
+.product-name {
+	font-family: 'Playfair Display', serif;
+	font-size: clamp(40px, 5vw, 70px);
+	font-weight: 400;
+	font-style: normal;
+	color: #2e2a22;
+	line-height: 1.1;
+}
+
+.product-desc {
+	font-family: 'Playfair Display', serif;
+	font-size: 14px;
+	font-weight: 600;
+	font-style: normal;
+	color: #9b7c4a;
+	text-decoration: none;
+	letter-spacing: 0.5px;
+}
+
+.product-link {
+	font-family: 'Playfair Display',serif;
+	font-size: 14px;
+	font-weight: 600;
+	font-style: normal;
+	color: #9b7c4a;
+	text-decoration: none;
+	letter-spacing: 0.5px;
+}
+
+.product-link:hover {
+	text-decoration: underline;
+}
+
+.product-arrow {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	background: transparent;
+	border: 1.5px solid #9b7c4a;
+	color: #9b7c4a;
+	width: 44px;
+	height: 44px;
+	border-radius: 50%;
+	font-size: 18px;
+	cursor: pointer;
+	z-index: 10;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.product-arrow:hover {
+	background: #9b7c4a;
+  	color: #fff;
+}
+
+.product-arrow-left {
+  	left: 20px;
+}
+
+.product-arrow-right {
+  	right: 20px;
+}

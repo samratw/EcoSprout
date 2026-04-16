@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ page import="com.islington.model.User" %>
+
 
 <!DOCTYPE html>
 <html>
@@ -26,9 +26,9 @@
 					</a>
 				</li>
 				<li>
-					<a href="<%=request.getContextPath()%>/productspage">
+					<a href="<%=request.getContextPath()%>/products">
 					<img src="<%=request.getContextPath()%>/images/cart-svgrepo-com.svg" alt="Shop" width="20px" height="20px">
-					Shop
+					Products
 					</a>
 				</li>
 				<li>
@@ -56,12 +56,7 @@
 			<button class="icon-btn" onclick="toggleProfileMenu()">
 				<img src="<%=request.getContextPath()%>/images/profile-about-mobile-ui-svgrepo-com.svg" alt="profile" width="20px" height="20px">
 			</button>
-			<div class="profile-dropdown" id="profileDropdown">
-				<p class="profile-dropdown-name"><%= user.getUsername() %></p>
-				<a href="<%=request.getContextPath()%>/profilepage">My Profile</a>
-                <a href="<%=request.getContextPath()%>/orderspage">My Orders</a>
-                <a href="<%=request.getContextPath()%>/logoutpage">Logout</a>
-			</div>
+			
 		</div>
 	</nav>
    	<!-- Slider Section -->

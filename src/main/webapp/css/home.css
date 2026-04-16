@@ -33,7 +33,7 @@ nav {
 }
 
 nav.scrolled {
-  background: rgba(45, 50, 34, 0.95);
+  background: #4A4035;
   backdrop-filter: blur(8px);
 }
 
@@ -45,7 +45,7 @@ nav.hidden {
   font-family: 'Playfair Display', serif;
   font-size: 20px;
   font-style: italic;
-  color: #ECF39E;
+  color: #4A4035;
   letter-spacing: 2px;
 }
 
@@ -59,7 +59,7 @@ nav.hidden {
 
 .nav-links a {
   text-decoration: none;
-  color: rgba(236, 243, 158, 0.75);
+  color: #4A4035;
   font-size: 15px;
   font-weight: 500;
   align-items: center;
@@ -68,13 +68,13 @@ nav.hidden {
 }
 
 .nav-links a.active {
-  color: #ECF39E;
+  color: #4A4035;
   border-bottom: 2px solid #A39B00;
   padding-bottom: 2px;
 }
 
 .nav-links a:hover {
-  color: #ECF39E;
+  color: #4A4035;
 }
 
 .nav-links a img {
@@ -100,7 +100,7 @@ nav.hidden {
 .icon-btn {
   background: transparent;
   border: none;
-  color: rgba(236, 243, 158, 0.75);
+  color: #4A4035;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -112,7 +112,7 @@ nav.hidden {
 }
 
 .icon-btn:hover {
-  color: #ECF39E;
+  color: #4A4035;
 }
 
 .profile-wrapper {

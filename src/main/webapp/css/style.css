@@ -19,7 +19,7 @@ nav {
     top: 16px;
     left: 16px;
     right: 16px;
-    background: transparent;
+    background: white;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -42,7 +42,7 @@ nav {
 
 .nav-links a {
 	text-decoration: none;
-	color: rgba(236, 243, 158, 0.75);	
+	color: #4A4035;
 	font-size: 15px;
 	font-weight: 500;
 	align-items: center;
@@ -51,13 +51,13 @@ nav {
 }
 
 .nav-links a.active {
-	color: #ECF39E;
+	color: #4A4035;
 	border-bottom: 2px solid #A39B00;
 	padding-bottom: 2px;
 }
 
 .nav-link a:hover {
-	color: #ECF39E;
+	color: #4A4035;
 }
 
 .nav-links a img {
@@ -76,9 +76,9 @@ nav {
 .login-btn{
 	display: inline-block;
 	padding: 7px 20px;
-	border: 1.5px solid rgba(236, 243, 158, 0.5);
+	border: 1.5px solid #4A4035;;
 	background: transparent;
-	color: #ECF39E;
+	color: #4A4035;
 	border-radius: 8px;
 	font-size: 15px;
 	font-weight: 500;

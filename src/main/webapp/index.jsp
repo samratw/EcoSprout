@@ -25,9 +25,9 @@
 					</a>
 				</li>
 				<li>
-					<a href="<%=request.getContextPath()%>/productspage">
+					<a href="<%=request.getContextPath()%>/products">
 					<img src="<%=request.getContextPath()%>/images/cart-svgrepo-com.svg" alt="Shop" width="20px" height="20px">
-					Shop
+					Products
 					</a>
 				</li>
 				<li>
@@ -99,7 +99,7 @@
 			<div class="product-info">
 				<p class="product-category">CATEGORY ONE</p>
 				<h1 class="product-name">Product Name One</h1>
-				<p class="product-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+				<p class="product-desc">Helloo
         								sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
         		<a href="<%=request.getContextPath()%>/products" class="product-link">Browse More &#8594;</a>
 			</div>

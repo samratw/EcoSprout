@@ -94,6 +94,34 @@
             <p class="stock">Out of Stock</p>
             <button disabled>Unavailable</button>
         </div>
+        <div class="card">
+            <img src="images/tomato.jpg" alt="Tomato">
+            <h3>Fresh Tomatoes</h3>
+            <p class="price">Rs. 80/kg</p>
+            <p class="stock">In Stock</p>
+            <button>Add to Cart</button>
+        </div>
+        <div class="card">
+            <img src="images/tomato.jpg" alt="Tomato">
+            <h3>Fresh Tomatoes</h3>
+            <p class="price">Rs. 80/kg</p>
+            <p class="stock">In Stock</p>
+            <button>Add to Cart</button>
+        </div>
+        <div class="card">
+            <img src="images/tomato.jpg" alt="Tomato">
+            <h3>Fresh Tomatoes</h3>
+            <p class="price">Rs. 80/kg</p>
+            <p class="stock">In Stock</p>
+            <button>Add to Cart</button>
+        </div>
+        <div class="card">
+            <img src="images/tomato.jpg" alt="Tomato">
+            <h3>Fresh Tomatoes</h3>
+            <p class="price">Rs. 80/kg</p>
+            <p class="stock">In Stock</p>
+            <button>Add to Cart</button>
+        </div>
 
     </div>
 </div>

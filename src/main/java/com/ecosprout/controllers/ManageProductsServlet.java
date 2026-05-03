@@ -1,12 +1,12 @@
-package com.ecosprout.controller;
+package com.ecosprout.controllers;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.WebServlet;
 import java.io.IOException;
 
-@WebServlet("/products")
-public class ProductsServlet extends HttpServlet {
+@WebServlet("/manageproducts")
+public class ManageProductsServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -17,7 +17,7 @@ public class ProductsServlet extends HttpServlet {
         
 
         // Forward to protected JSP
-        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/pages/products.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/pages/manageproducts.jsp");
         rd.forward(request, response);
     }
 }

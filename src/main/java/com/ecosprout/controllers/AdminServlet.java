@@ -1,4 +1,4 @@
-package com.ecosprout.controller;
+package com.ecosprout.controllers;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;

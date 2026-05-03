@@ -220,3 +220,34 @@ body {
 .login-register a:hover {
 	text-decoration: underline;
 }
+
+.form-group select {
+	background: transparent;
+	border: none;
+	border-bottom: 1px solid #ECF39E33;
+	padding: 7px 0;
+	color: #ECF39E;
+	font-size: 14px;
+	font-family: 'Inter', sans-serif;
+	outline: none;
+	transition: border-color 0.2s;
+	cursor: none;
+	appearance: none;
+	-webkit-apperance: none;
+	width: 100%;
+}
+
+.form-group select:focus {
+	border-bottom-color: #90A955;
+}
+
+.form-group select option[value=""]{
+	color: #ECF39E4D;
+}
+
+.form-group select option {
+    background-color: #2D3220;
+    color: #ECF39E;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+}

@@ -1,0 +1,28 @@
+package com.ecosprout.util;
+import java.sql.*;
+
+public class DBUtil {
+	private static final String URL = "jdbc:mysql://localhost:3306/ecosprout";
+    private static final String USER = "root";
+    private static final String PASSWORD = "";
+
+ 
+    public static Connection getConnection() {
+
+        Connection conn = null;
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            conn = DriverManager.getConnection(URL, USER, PASSWORD);
+
+            System.out.println("Connected to DB");
+
+        } catch (Exception e) {
+            System.out.println("DB Connection Failed");
+            e.printStackTrace(); 
+        }
+
+        return conn;
+    }
+}

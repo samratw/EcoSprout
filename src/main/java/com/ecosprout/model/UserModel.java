@@ -1,8 +1,14 @@
 package com.ecosprout.model;
 
+/**
+ * UserModel - Represents a user in the EcoSprout system.
+ * Roles: admin, vendor, buyer
+ * Status: pending (awaiting admin approval), approved, rejected
+ */
 public class UserModel {
+
     private int id;
-    private String name, email, password, role;
+    private String name, email, password, role, phone, status;
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
@@ -18,4 +24,10 @@ public class UserModel {
 
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
+
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 }

@@ -8,21 +8,22 @@ import com.ecosprout.model.UserModel;
 import com.ecosprout.service.ProductService;
 
 /**
- * VendorServlet - Loads data for the vendor dashboard.
+ * DeleteProductServlet - Handles deletion of a product by the vendor or admin.
  */
-@WebServlet("/vendor")
-public class VendorServlet extends HttpServlet {
+@WebServlet("/deleteproduct")
+public class DeleteProductServlet extends HttpServlet {
 
     private final ProductService productService = new ProductService();
 
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
+        UserModel user = (UserModel) req.getSession().getAttribute("user");
         try {
-            UserModel user = (UserModel) req.getSession().getAttribute("user");
-            req.setAttribute("products", productService.getProductsByVendor(user.getId()));
+            int id = Integer.parseInt(req.getParameter("id"));
+            productService.deleteProduct(id);
         } catch (Exception e) {
-            req.setAttribute("error", "Could not load products.");
+            // Log error but continue redirect
         }
-        req.getRequestDispatcher("/WEB-INF/pages/vendor.jsp").forward(req, res);
+        res.sendRedirect(req.getContextPath() + ("admin".equals(user.getRole()) ? "/admin" : "/vendor"));
     }
 }

@@ -1,49 +1,79 @@
 package com.ecosprout.controllers;
 
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.MultipartConfig;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.Part;
+import jakarta.servlet.annotation.*;
+import jakarta.servlet.http.*;
+import java.io.*;
+import com.ecosprout.model.*;
+import com.ecosprout.service.ProductService;
+import com.ecosprout.util.AppConfig;
 
-import java.io.File;
-import java.io.IOException;
-
-import com.ecosprout.dao.ProductDAO;
-import com.ecosprout.model.ProductModel;
-import com.ecosprout.model.UserModel;
-
+/**
+ * AddProductServlet - Handles adding a new agro product (with image upload).
+ * Pushes categories, units from AppConfig so JSP never hardcodes lists.
+ */
 @WebServlet("/addproduct")
-@MultipartConfig
+@MultipartConfig(maxFileSize = 5 * 1024 * 1024)
 public class AddProductServlet extends HttpServlet {
+
+    private final ProductService productService = new ProductService();
 
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
-        req.getRequestDispatcher("/WEB-INF/pages/addproduct.jsp").forward(req,res);
+        // Push all dropdown data from backend
+        req.setAttribute("categories",      AppConfig.CATEGORIES);
+        req.setAttribute("units",           AppConfig.UNITS);
+        req.getRequestDispatcher("/WEB-INF/pages/addproduct.jsp").forward(req, res);
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
 
-        Part file = req.getPart("image");
-        String fileName = System.currentTimeMillis()+"_"+file.getSubmittedFileName();
-
-        String path = getServletContext().getRealPath("") + "images";
-        new File(path).mkdir();
-        file.write(path + File.separator + fileName);
-
         UserModel user = (UserModel) req.getSession().getAttribute("user");
 
-        ProductModel p = new ProductModel();
-        p.setName(req.getParameter("name"));
-        p.setCategory(req.getParameter("category"));
-        p.setImage(fileName);
-        p.setVendorId(user.getId());
+        try {
+            Part filePart = req.getPart("image");
+            String fileName = null;
 
-        new ProductDAO().addProduct(p);
+            if (filePart != null && filePart.getSize() > 0) {
+                fileName = System.currentTimeMillis() + "_" + filePart.getSubmittedFileName();
+                String uploadPath = getServletContext().getRealPath("") + File.separator + "images";
+                new File(uploadPath).mkdirs();
+                filePart.write(uploadPath + File.separator + fileName);
+            }
 
-        res.sendRedirect(req.getContextPath() + "/viewproducts");
+            ProductModel p = new ProductModel();
+            p.setName(req.getParameter("name"));
+            p.setCategory(req.getParameter("category"));
+            p.setDescription(req.getParameter("description"));
+            p.setPrice(Double.parseDouble(req.getParameter("price")));
+            p.setQuantity(Integer.parseInt(req.getParameter("quantity")));
+            p.setUnit(req.getParameter("unit"));
+            p.setImage(fileName);
+            p.setVendorId(user.getId());
+            p.setStatus("available");
+
+            String error = productService.addProduct(p);
+            if (error != null) {
+                req.setAttribute("error",      error);
+                req.setAttribute("categories", AppConfig.CATEGORIES);
+                req.setAttribute("units",      AppConfig.UNITS);
+                req.getRequestDispatcher("/WEB-INF/pages/addproduct.jsp").forward(req, res);
+                return;
+            }
+
+            res.sendRedirect(req.getContextPath() + ("admin".equals(user.getRole()) ? "/admin" : "/vendor"));
+
+        } catch (NumberFormatException e) {
+            req.setAttribute("error",      "Price and quantity must be valid numbers.");
+            req.setAttribute("categories", AppConfig.CATEGORIES);
+            req.setAttribute("units",      AppConfig.UNITS);
+            req.getRequestDispatcher("/WEB-INF/pages/addproduct.jsp").forward(req, res);
+        } catch (Exception e) {
+            req.setAttribute("error",      "An error occurred while adding the product.");
+            req.setAttribute("categories", AppConfig.CATEGORIES);
+            req.setAttribute("units",      AppConfig.UNITS);
+            req.getRequestDispatcher("/WEB-INF/pages/addproduct.jsp").forward(req, res);
+        }
     }
 }

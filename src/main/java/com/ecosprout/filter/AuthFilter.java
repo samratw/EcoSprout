@@ -4,85 +4,82 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import com.ecosprout.model.UserModel;
 
-/**
- * AuthFilter - Intercepts all requests to enforce authentication and role-based access control.
- * Unauthenticated users are redirected to the login page.
- * Users accessing pages outside their role are redirected to their dashboard.
- */
+/** Enforces authentication and role-based access on every request. */
 @WebFilter("/*")
 public class AuthFilter implements Filter {
 
-    // Paths that are accessible without a login session
-    private static final String[] PUBLIC_PATHS = { "/", "/login", "/register", "/about", "/contact" };
+    // Public pages, static folders, and static file suffixes.
+    private static final Set<String> PUBLIC_PATHS = new HashSet<>(Arrays.asList(
+        "/", "/index.jsp", "/login", "/register", "/about", "/contact"
+    ));
+    private static final String[] PUBLIC_PREFIXES = { "/css/", "/js/", "/images/" };
+    private static final String[] STATIC_SUFFIXES = {
+        ".css", ".js", ".png", ".jpg", ".jpeg", ".gif", ".ico", ".svg"
+    };
 
+    @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
 
         HttpServletRequest  request  = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
 
-        String uri = request.getRequestURI();
+        String ctx  = request.getContextPath();
+        String uri  = request.getRequestURI();
+        String path = uri.startsWith(ctx) ? uri.substring(ctx.length()) : uri;
+        if (path.isEmpty()) path = "/";
 
-        // Allow static resources (CSS, images, JS)
-        if (uri.endsWith(".css") || uri.endsWith(".js") || uri.endsWith(".png")
-                || uri.endsWith(".jpg") || uri.endsWith(".jpeg") || uri.endsWith(".ico")
-                || uri.contains("/images/")) {
-            chain.doFilter(req, res);
-            return;
+        // Static resources & public pages
+        for (String prefix : PUBLIC_PREFIXES) {
+            if (path.startsWith(prefix)) { chain.doFilter(req, res); return; }
         }
-
-        // Allow public pages without authentication
-        for (String path : PUBLIC_PATHS) {
-            if (uri.contains(path)) {
-                chain.doFilter(req, res);
-                return;
-            }
+        for (String suffix : STATIC_SUFFIXES) {
+            if (path.endsWith(suffix)) { chain.doFilter(req, res); return; }
         }
+        if (PUBLIC_PATHS.contains(path)) { chain.doFilter(req, res); return; }
 
-        // Redirect root "/" to login
-        String contextPath = request.getContextPath();
-        if (uri.equals(contextPath + "/") || uri.equals(contextPath)) {
-            response.sendRedirect(contextPath + "/login");
-            return;
-        }
-
-        // Check session
+        // Authentication required
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("user") == null) {
-            response.sendRedirect(contextPath + "/login");
-            return;
-        }
-
-        UserModel user = (UserModel) session.getAttribute("user");
-        String role = user.getRole();
+        UserModel user = (session != null) ? (UserModel) session.getAttribute("user") : null;
+        if (user == null) { response.sendRedirect(ctx + "/login"); return; }
 
         // Role-based access control
-        if (uri.contains("/admin") && !"admin".equals(role)) {
-            redirectToDashboard(response, contextPath, role);
-            return;
+        String role = user.getRole();
+        if (path.equals("/admin") || path.equals("/manageusers")
+                || path.equals("/viewproducts") || path.equals("/reports")) {
+            if (!"admin".equals(role)) { redirectToDashboard(response, ctx, role); return; }
         }
-        if ((uri.contains("/vendor") || uri.contains("/addproduct") || uri.contains("/updateproduct") || uri.contains("/deleteproduct"))
-                && !"vendor".equals(role) && !"admin".equals(role)) {
-            redirectToDashboard(response, contextPath, role);
-            return;
+        else if (path.equals("/vendor")) {
+            if (!"vendor".equals(role)) { redirectToDashboard(response, ctx, role); return; }
         }
-        if (uri.contains("/buyer") && !"buyer".equals(role)) {
-            redirectToDashboard(response, contextPath, role);
-            return;
+        else if (path.equals("/buyer") || path.equals("/placeorder")
+                || path.equals("/wishlist") || path.equals("/myorders")) {
+            if (!"buyer".equals(role)) { redirectToDashboard(response, ctx, role); return; }
         }
+        else if (path.equals("/addproduct") || path.equals("/updateproduct")
+                || path.equals("/deleteproduct")) {
+            if (!"vendor".equals(role) && !"admin".equals(role)) {
+                redirectToDashboard(response, ctx, role); return;
+            }
+        }
+        // /profile and /changepassword require any logged-in user (already passed auth)
 
         chain.doFilter(req, res);
     }
 
-    /** Redirects user to the appropriate dashboard based on role. */
-    private void redirectToDashboard(HttpServletResponse response, String ctx, String role) throws IOException {
-        if ("admin".equals(role))       response.sendRedirect(ctx + "/admin");
-        else if ("vendor".equals(role)) response.sendRedirect(ctx + "/vendor");
-        else                            response.sendRedirect(ctx + "/buyer");
+    /** Redirect to the dashboard matching the user's role. */
+    private void redirectToDashboard(HttpServletResponse res, String ctx, String role) throws IOException {
+        if      ("admin".equals(role))  res.sendRedirect(ctx + "/admin");
+        else if ("vendor".equals(role)) res.sendRedirect(ctx + "/vendor");
+        else if ("buyer".equals(role))  res.sendRedirect(ctx + "/buyer");
+        else                            res.sendRedirect(ctx + "/login");
     }
 
-    public void init(FilterConfig config) {}
-    public void destroy() {}
+    @Override public void init(FilterConfig config) { }
+    @Override public void destroy() { }
 }

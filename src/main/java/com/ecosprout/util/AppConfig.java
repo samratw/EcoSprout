@@ -27,12 +27,12 @@ public class AppConfig {
     /** Units of measurement for products. key = stored value, value = display label. */
     public static final Map<String, String> UNITS = new LinkedHashMap<>();
     static {
-        UNITS.put("kg",     "Kilograms (kg)");
-        UNITS.put("g",      "Grams (g)");
-        UNITS.put("piece",  "Per Piece");
-        UNITS.put("dozen",  "Per Dozen");
-        UNITS.put("litre",  "Litres");
-        UNITS.put("pack",   "Pack");
+        UNITS.put("kg", "Kilograms (kg)");
+        UNITS.put("g", "Grams (g)");
+        UNITS.put("piece", "Per Piece");
+        UNITS.put("dozen", "Per Dozen");
+        UNITS.put("litre", "Litres");
+        UNITS.put("pack", "Pack");
     }
 
     /** Product statuses. key = stored value, value = display label. */
@@ -45,8 +45,8 @@ public class AppConfig {
     /** User roles that can self-register. key = stored value, value = display label. */
     public static final Map<String, String> REGISTER_ROLES = new LinkedHashMap<>();
     static {
-        REGISTER_ROLES.put("buyer",  "Buyer — I want to purchase products");
-        REGISTER_ROLES.put("vendor", "Vendor — I want to sell products");
+        REGISTER_ROLES.put("buyer",  "Buyer - I want to purchase products");
+        REGISTER_ROLES.put("vendor", "Vendor - I want to sell products");
     }
 
     /** Contact inquiry subject options. */

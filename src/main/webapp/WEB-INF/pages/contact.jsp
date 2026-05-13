@@ -1,97 +1,87 @@
-<%@ page contentType="text/html;charset=UTF-8" import="java.util.*" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/includes/taglibs.jsp" %>
+<c:set var="pageTitle" value="Contact Us" scope="request"/>
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contact Us - EcoSprout</title>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <%@ include file="/WEB-INF/includes/head.jsp" %>
 </head>
 <body>
-<nav class="navbar">
-  <img src="${pageContext.request.contextPath}/images/logo.png" width="250" height="65" />
-  <nav>
-    <a href="about">About</a>
-    <a href="contact">Contact</a>
-    <% if (session.getAttribute("user") != null) { %>
-      <a href="logout" class="logout">Logout</a>
-    <% } else { %>
-      <a href="login">Login</a>
-    <% } %>
-  </nav>
-</nav>
+
+<%@ include file="/WEB-INF/includes/navbar.jsp" %>
 
 <div class="page">
-  <div style="max-width:700px; margin:0 auto;">
-    <div class="page-header">
-      <h1>Contact Us</h1>
-      <p>We'd love to hear from you. Send us a message and we'll respond within 24 hours.</p>
-    </div>
+    <div style="max-width:760px; margin:0 auto;">
 
-    <% String success = (String) request.getAttribute("success"); %>
-    <% if (success != null) { %><div class="alert alert-success"><%= success %></div><% } %>
-
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:24px;">
-      <div class="card" style="text-align:center;">
-        <div style="font-size:2rem;">📍</div>
-        <h3 style="color:var(--green-dark); margin:8px 0 4px;">Address</h3>
-        <p style="font-size:0.9rem; color:var(--text-light);">Kathmandu, Bagmati Province<br>Nepal</p>
-      </div>
-      <div class="card" style="text-align:center;">
-        <div style="font-size:2rem;">📧</div>
-        <h3 style="color:var(--green-dark); margin:8px 0 4px;">Email</h3>
-        <p style="font-size:0.9rem; color:var(--text-light);">support@ecosprout.com.np</p>
-      </div>
-      <div class="card" style="text-align:center;">
-        <div style="font-size:2rem;">📞</div>
-        <h3 style="color:var(--green-dark); margin:8px 0 4px;">Phone</h3>
-        <p style="font-size:0.9rem; color:var(--text-light);">+977-1-XXXXXXX</p>
-      </div>
-      <div class="card" style="text-align:center;">
-        <div style="font-size:2rem;">🕐</div>
-        <h3 style="color:var(--green-dark); margin:8px 0 4px;">Hours</h3>
-        <p style="font-size:0.9rem; color:var(--text-light);">Sun–Fri: 9AM – 6PM NPT</p>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>Send us a Message</h2>
-      <form action="contact" method="post" style="margin-top:16px;">
-        <div class="form-row">
-          <div class="form-group">
-            <label>Full Name *</label>
-            <input type="text" name="name" placeholder="Your name" required>
-          </div>
-          <div class="form-group">
-            <label>Email *</label>
-            <input type="email" name="email" placeholder="your@email.com" required>
-          </div>
+        <div class="page-header">
+            <h1>Contact Us</h1>
+            <p>We&#x2019;d love to hear from you. Send us a message and we&#x2019;ll
+               respond within 24 hours.</p>
         </div>
 
-        <%-- Subject list pushed by ContactServlet from AppConfig.CONTACT_SUBJECTS --%>
-        <div class="form-group">
-          <label>Subject *</label>
-          <select name="subject" required>
-            <option value="">-- Select Subject --</option>
-            <%
-              List<String> subjects = (List<String>) request.getAttribute("contactSubjects");
-              if (subjects != null) {
-                for (String s : subjects) {
-            %>
-            <option value="<%= s %>"><%= s %></option>
-            <% }} %>
-          </select>
+        <%@ include file="/WEB-INF/includes/messages.jsp" %>
+
+        <div class="info-grid">
+            <div class="card center">
+                <div class="info-icon">&#x1F4CD;</div>
+                <h3>Address</h3>
+                <p>Kathmandu, Bagmati Province<br>Nepal</p>
+            </div>
+            <div class="card center">
+                <div class="info-icon">&#x1F4E7;</div>
+                <h3>Email</h3>
+                <p>support@ecosprout.com.np</p>
+            </div>
+            <div class="card center">
+                <div class="info-icon">&#x1F550;</div>
+                <h3>Hours</h3>
+                <p>Sun&ndash;Fri: 9 AM &ndash; 6 PM NPT</p>
+            </div>
         </div>
 
-        <div class="form-group">
-          <label>Message *</label>
-          <textarea name="message" rows="5"
-                    placeholder="How can we help you?" required></textarea>
+        <div class="card">
+            <h2>Send us a Message</h2>
+            <form action="${ctx}/contact" method="post" style="margin-top:16px;">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Full Name *</label>
+                        <input type="text" id="name" name="name"
+                               placeholder="Your name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email"
+                               placeholder="your@email.com" required>
+                    </div>
+                </div>
+
+                <%-- Subject list pushed by ContactServlet from AppConfig.CONTACT_SUBJECTS --%>
+                <div class="form-group">
+                    <label for="subject">Subject *</label>
+                    <select id="subject" name="subject" required>
+                        <option value="">-- Select Subject --</option>
+                        <c:forEach var="s" items="${contactSubjects}">
+                            <option value="${s}">${s}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Message *</label>
+                    <textarea id="message" name="message" rows="5"
+                              placeholder="How can we help you?" required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Send Message</button>
+            </form>
         </div>
-        <button type="submit" class="btn btn-primary">Send Message</button>
-      </form>
     </div>
-  </div>
 </div>
-<footer>&copy; 2026 EcoSprout | <a href="about">About</a></footer>
+
+<%@ include file="/WEB-INF/includes/footer.jsp" %>
+
 </body>
 </html>

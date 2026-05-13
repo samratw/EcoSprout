@@ -1,161 +1,93 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-
-
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/includes/taglibs.jsp" %>
+<c:set var="pageTitle" value="Add Product" scope="request"/>
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<c:set var="homeUrl"
+       value="${sessionScope.user.role eq 'admin' ? ctx.concat('/admin') : ctx.concat('/vendor')}"/>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Add Product - EcoSprout</title>
-
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <%@ include file="/WEB-INF/includes/head.jsp" %>
 </head>
-
 <body>
 
-<nav class="navbar">
-  <a href="${sessionScope.user.role == 'admin' ? 'admin' : 'vendor'}" class="brand">
-    🌱 Eco<span>Sprout</span>
-  </a>
-
-  <nav>
-    <a href="${sessionScope.user.role == 'admin' ? 'admin' : 'vendor'}">
-      Dashboard
-    </a>
-
-    <a href="logout" class="logout">Logout</a>
-  </nav>
-</nav>
+<%@ include file="/WEB-INF/includes/navbar.jsp" %>
 
 <div class="page">
-
-  <div class="page-header">
-    <h1>Add New Product</h1>
-    <p>List a new agro product on EcoSprout.</p>
-  </div>
-
-  <c:if test="${not empty error}">
-    <div class="alert alert-error">
-      ${error}
+    <div class="page-header">
+        <h1>Add New Product</h1>
+        <p>List a new agro product on EcoSprout.</p>
     </div>
-  </c:if>
 
-  <div class="card" style="max-width:680px;">
+    <%@ include file="/WEB-INF/includes/messages.jsp" %>
 
-    <form action="addproduct" method="post" enctype="multipart/form-data">
+    <div class="card" style="max-width:680px;">
+        <form action="${ctx}/addproduct" method="post" enctype="multipart/form-data">
 
-      <div class="form-group">
-        <label>Product Name *</label>
+            <div class="form-group">
+                <label for="name">Product Name *</label>
+                <input type="text" id="name" name="name"
+                       placeholder="e.g. Organic Tomatoes" required>
+            </div>
 
-        <input type="text"
-               name="name"
-               placeholder="e.g. Organic Tomatoes"
-               required>
-      </div>
+            <div class="form-row">
+                <%-- Categories pushed by AddProductServlet from AppConfig --%>
+                <div class="form-group">
+                    <label for="category">Category *</label>
+                    <select id="category" name="category" required>
+                        <option value="">-- Select Category --</option>
+                        <c:forEach var="cat" items="${categories}">
+                            <option value="${cat}">${cat}</option>
+                        </c:forEach>
+                    </select>
+                </div>
 
-      <div class="form-row">
+                <%-- Units pushed by AddProductServlet from AppConfig --%>
+                <div class="form-group">
+                    <label for="unit">Unit *</label>
+                    <select id="unit" name="unit" required>
+                        <c:forEach var="entry" items="${units}">
+                            <option value="${entry.key}">${entry.value}</option>
+                        </c:forEach>
+                    </select>
+                </div>
+            </div>
 
-        <%-- Category list pushed by AddProductServlet from AppConfig --%>
-        <div class="form-group">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="price">Price per Unit (NPR) *</label>
+                    <input type="number" id="price" name="price"
+                           min="0.01" step="0.01" placeholder="e.g. 120.00" required>
+                </div>
+                <div class="form-group">
+                    <label for="quantity">Available Quantity *</label>
+                    <input type="number" id="quantity" name="quantity"
+                           min="0" placeholder="e.g. 50" required>
+                </div>
+            </div>
 
-          <label>Category *</label>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" rows="3"
+                          placeholder="Describe your product, growing method, freshness, etc."></textarea>
+            </div>
 
-          <select name="category" required>
+            <div class="form-group">
+                <label for="image">Product Image</label>
+                <input type="file" id="image" name="image" accept="image/*">
+                <small style="color:var(--text-light);">Max 5MB. JPG, PNG accepted.</small>
+            </div>
 
-            <option value="">-- Select Category --</option>
-
-            <c:forEach var="cat" items="${categories}">
-              <option value="${cat}">
-                ${cat}
-              </option>
-            </c:forEach>
-
-          </select>
-        </div>
-
-        <%-- Unit map pushed by AddProductServlet from AppConfig --%>
-        <div class="form-group">
-
-          <label>Unit *</label>
-
-          <select name="unit" required>
-
-            <c:forEach var="entry" items="${units}">
-              <option value="${entry.key}">
-                ${entry.value}
-              </option>
-            </c:forEach>
-
-          </select>
-        </div>
-      </div>
-
-      <div class="form-row">
-
-        <div class="form-group">
-          <label>Price per Unit (NPR) *</label>
-
-          <input type="number"
-                 name="price"
-                 min="0.01"
-                 step="0.01"
-                 placeholder="e.g. 120.00"
-                 required>
-        </div>
-
-        <div class="form-group">
-          <label>Available Quantity *</label>
-
-          <input type="number"
-                 name="quantity"
-                 min="0"
-                 placeholder="e.g. 50"
-                 required>
-        </div>
-      </div>
-
-      <div class="form-group">
-
-        <label>Description</label>
-
-        <textarea name="description"
-                  rows="3"
-                  placeholder="Describe your product, growing method, freshness, etc."></textarea>
-      </div>
-
-      <div class="form-group">
-
-        <label>Product Image</label>
-
-        <input type="file"
-               name="image"
-               accept="image/*">
-
-        <small style="color:var(--text-light);">
-          Max 5MB. JPG, PNG accepted.
-        </small>
-      </div>
-
-      <div style="display:flex;gap:12px;margin-top:8px;">
-
-        <button type="submit" class="btn btn-primary">
-          Add Product
-        </button>
-
-        <a href="${sessionScope.user.role == 'admin' ? 'admin' : 'vendor'}"
-           class="btn btn-outline">
-          Cancel
-        </a>
-
-      </div>
-
-    </form>
-  </div>
+            <div style="display:flex; gap:12px; margin-top:8px;">
+                <button type="submit" class="btn btn-primary">Add Product</button>
+                <a href="${homeUrl}" class="btn btn-outline">Cancel</a>
+            </div>
+        </form>
+    </div>
 </div>
 
-<footer>
-  &copy; 2026 EcoSprout
-</footer>
+<%@ include file="/WEB-INF/includes/footer.jsp" %>
 
 </body>
 </html>

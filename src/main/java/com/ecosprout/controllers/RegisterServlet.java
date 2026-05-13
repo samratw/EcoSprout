@@ -26,18 +26,18 @@ public class RegisterServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse res)
             throws IOException, ServletException {
 
-        String name     = req.getParameter("name");
-        String email    = req.getParameter("email");
+        String name = req.getParameter("name");
+        String email = req.getParameter("email");
         String password = req.getParameter("password");
-        String phone    = req.getParameter("phone");
-        String role     = req.getParameter("role");
+        String phone = req.getParameter("phone");
+        String role = req.getParameter("role");
 
         UserModel u = new UserModel();
-        u.setName    (name     != null ? name.trim()     : "");
-        u.setEmail   (email    != null ? email.trim()    : "");
-        u.setPassword(password != null ? password        : "");
-        u.setPhone   (phone    != null ? phone.trim()    : "");
-        u.setRole    (role     != null ? role            : "");
+        u.setName(name != null ? name.trim() : "");
+        u.setEmail(email != null ? email.trim() : "");
+        u.setPassword(password != null ? password : "");
+        u.setPhone(phone != null ? phone.trim() : "");
+        u.setRole(role != null ? role : "");
 
         try {
             String error = userService.register(u);

@@ -1,127 +1,160 @@
-<%@ page contentType="text/html;charset=UTF-8" import="com.ecosprout.model.ProductModel,java.util.*" session="true" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/includes/taglibs.jsp"%>
+<c:set var="pageTitle" value="Browse Products" scope="request" />
+<c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Browse Products - EcoSprout</title>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+<%@ include file="/WEB-INF/includes/head.jsp"%>
 </head>
 <body>
-<nav class="navbar">
-  <img src="${pageContext.request.contextPath}/images/logo.png" width="250" height="65" />
-  <nav>
-    <a href="buyer">Browse</a>
-    <a href="about">About</a>
-    <a href="contact">Contact</a>
-    <a href="logout" class="logout">Logout</a>
-  </nav>
-</nav>
 
-<div class="page">
-  <div class="page-header">
-    <h1>Browse Agro Products</h1>
-    <p>Welcome, <strong>${sessionScope.user.name}</strong> - discover fresh products from local vendors.</p>
-  </div>
+	<%@ include file="/WEB-INF/includes/navbar.jsp"%>
 
-  <%
-    String orderSuccess = (String) session.getAttribute("orderSuccess");
-    String orderError   = (String) session.getAttribute("orderError");
-    if (orderSuccess != null) { session.removeAttribute("orderSuccess"); }
-    if (orderError   != null) { session.removeAttribute("orderError");   }
-    String searchError = (String) request.getAttribute("error");
-  %>
-  <% if (orderSuccess != null) { %><div class="alert alert-success"><%= orderSuccess %></div><% } %>
-  <% if (orderError   != null) { %><div class="alert alert-error">  <%= orderError   %></div><% } %>
-  <% if (searchError  != null) { %><div class="alert alert-error">  <%= searchError  %></div><% } %>
+	<div class="page">
+		<div class="page-header">
+			<h1>Browse Agro Products</h1>
+			<p>
+				Welcome, <strong>${sessionScope.user.name}</strong> &ndash; discover
+				fresh products from local vendors.
+			</p>
+		</div>
 
-  <!-- Wishlist indicator -->
-  <%
-    Set<Integer> wishlist = (Set<Integer>) session.getAttribute("wishlist");
-    if (wishlist == null) { wishlist = new HashSet<>(); session.setAttribute("wishlist", wishlist); }
-    int wishCount = wishlist.size();
-  %>
-  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
-    <span style="color:var(--text-light);">❤️ Wishlist: <strong><%= wishCount %> item(s)</strong></span>
-    <a href="buyer?showWishlist=1" class="btn btn-outline btn-sm">View Wishlist</a>
-  </div>
+		<%@ include file="/WEB-INF/includes/messages.jsp"%>
 
-  <!-- Search Bar -->
-  <form action="buyer" method="get" class="search-bar">
-    <input type="text" name="search" placeholder="Search by product name or category..."
-           value="${param.search}">
-    <button type="submit" class="btn btn-primary">Search</button>
-    <% if (request.getParameter("search") != null && !request.getParameter("search").isEmpty()) { %>
-      <a href="buyer" class="btn btn-outline">Clear</a>
-    <% } %>
-  </form>
+		<%-- Wishlist indicator --%>
+		<div class="row-between" style="margin-bottom: 16px;">
+			<span style="color: var(--text-light);"> &#x2764;&#xFE0F;
+				Wishlist: <strong>${wishCount} item(s)</strong>
+			</span> <a href="${ctx}/buyer?showWishlist=1" class="btn btn-outline btn-sm">View
+				Wishlist</a>
+		</div>
 
-  <%
-    // Show wishlist filtered view
-    boolean showWishlist = "1".equals(request.getParameter("showWishlist"));
-    List<ProductModel> allProducts = (List<ProductModel>) request.getAttribute("products");
-    List<ProductModel> displayProducts = new ArrayList<>();
+		<%-- Search Bar --%>
+		<form action="${ctx}/buyer" method="get" class="search-bar">
+			<input type="text" name="search"
+				placeholder="Search by product name or category..."
+				value="${param.search}">
+			<button type="submit" class="btn btn-primary">Search</button>
+			<c:if test="${not empty param.search}">
+				<a href="${ctx}/buyer" class="btn btn-outline">Clear</a>
+			</c:if>
+		</form>
 
-    if (allProducts != null) {
-      for (ProductModel p : allProducts) {
-        if (!showWishlist || wishlist.contains(p.getId())) {
-          displayProducts.add(p);
-        }
-      }
-    }
+		<%-- Wishlist-filtered view notice --%>
+		<c:if test="${showWishlist}">
+			<div class="alert alert-info">
+				Showing your wishlist (
+				<c:out value="${fn:length(products)}" />
+				items). <a href="${ctx}/buyer">Browse all products</a>
+			</div>
+		</c:if>
 
-    if (showWishlist) {
-  %><div class="alert alert-info">Showing your wishlist (<%= displayProducts.size() %> items). <a href="buyer">Browse all products</a></div><% } %>
+		<c:choose>
+			<c:when test="${empty products}">
+				<div class="card center" style="padding: 40px;">
+					<p style="font-size: 1.2rem; color: var(--text-light);">
+						&#x1F33E; No products found.</p>
+					<c:if test="${showWishlist}">
+						<p>
+							Your wishlist is empty. <a href="${ctx}/buyer">Browse
+								products</a>
+						</p>
+					</c:if>
+				</div>
+			</c:when>
+			<c:otherwise>
+				<div class="product-grid">
+					<c:forEach var="p" items="${products}">
 
-  <% if (displayProducts.isEmpty()) { %>
-  <div class="card" style="text-align:center; padding:40px;">
-    <p style="font-size:1.2rem; color:var(--text-light);">🌾 No products found.</p>
-    <% if (showWishlist) { %><p>Your wishlist is empty. <a href="buyer">Browse products</a></p><% } %>
-  </div>
-  <% } else { %>
-  <div class="product-grid">
-    <% for (ProductModel p : displayProducts) {
-         boolean inWishlist = wishlist.contains(p.getId()); %>
-    <div class="product-card">
-      <% if (p.getImage() != null) { %>
-        <img src="${pageContext.request.contextPath}/images/<%= p.getImage() %>" alt="<%= p.getName() %>">
-      <% } else { %>
-        <div style="height:160px;background:var(--green-light);display:flex;align-items:center;justify-content:center;font-size:2.5rem;">🌾</div>
-      <% } %>
-      <div class="pc-body">
-        <div style="display:flex;justify-content:space-between;align-items:start;">
-          <div class="pc-name"><%= p.getName() %></div>
-          <form action="wishlist" method="post" style="margin:0;">
-            <input type="hidden" name="productId" value="<%= p.getId() %>">
-            <button type="submit" class="wishlist-btn <%= inWishlist ? "active" : "" %>"
-                    title="<%= inWishlist ? "Remove from wishlist" : "Add to wishlist" %>">
-              <%= inWishlist ? "❤️" : "🤍" %>
-            </button>
-          </form>
-        </div>
-        <div class="pc-cat"><%= p.getCategory() %></div>
-        <div class="pc-price">NPR <%= String.format("%.2f", p.getPrice()) %> / <%= p.getUnit() %></div>
-        <div class="pc-qty">Available: <%= p.getQuantity() %> <%= p.getUnit() %></div>
-        <% if (p.getDescription() != null && !p.getDescription().isEmpty()) { %>
-          <p style="font-size:0.82rem;color:var(--text-light);margin-top:6px;"><%= p.getDescription().length() > 60 ? p.getDescription().substring(0,60)+"..." : p.getDescription() %></p>
-        <% } %>
-      </div>
-      <% if (p.getQuantity() > 0) { %>
-      <div style="padding:0 14px 14px;">
-        <form action="placeorder" method="post" style="display:flex;gap:8px;align-items:center;">
-          <input type="hidden" name="productId" value="<%= p.getId() %>">
-          <input type="number" name="quantity" min="1" max="<%= p.getQuantity() %>" value="1"
-                 style="width:70px;padding:6px;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;">
-          <button type="submit" class="btn btn-primary btn-sm">Order</button>
-        </form>
-      </div>
-      <% } else { %>
-      <div style="padding:0 14px 14px;"><span class="badge badge-rejected">Out of Stock</span></div>
-      <% } %>
-    </div>
-    <% } %>
-  </div>
-  <% } %>
-</div>
-<footer>&copy; 2026 EcoSprout | <a href="about">About</a> | <a href="contact">Contact</a></footer>
+						<%-- Compute wishlist membership without scriptlets --%>
+						<c:set var="inWishlist"
+							value="${not empty wishlistMap and wishlistMap[p.id]}" />
+
+						<div class="product-card">
+							<c:choose>
+								<c:when test="${not empty p.image}">
+									<img src="${ctx}/images/${p.image}" alt="${p.name}">
+								</c:when>
+								<c:otherwise>
+									<div class="product-placeholder">&#x1F33E;</div>
+								</c:otherwise>
+							</c:choose>
+
+							<div class="pc-body">
+								<div class="row-between">
+									<div class="pc-name">
+										<c:out value="${p.name}" />
+									</div>
+									<form action="${ctx}/wishlist" method="post" style="margin: 0;">
+										<input type="hidden" name="productId" value="${p.id}">
+										<button type="submit"
+											class="wishlist-btn"
+											title="${inWishlist ? 'Remove from wishlist' : 'Add to wishlist'}">
+											<c:choose>
+												<c:when test="${inWishlist}">
+													<span class="wishlist-icon filled">&#10084;</span>
+												</c:when>
+												<c:otherwise>
+													<span class="wishlist-icon">&#10084;</span>
+												</c:otherwise>
+											</c:choose>
+										</button>
+									</form>
+								</div>
+
+								<div class="pc-cat">
+									<c:out value="${p.category}" />
+								</div>
+								<div class="pc-price">
+									NPR
+									<fmt:formatNumber value="${p.price}" minFractionDigits="2"
+										maxFractionDigits="2" />
+									/ ${p.unit}
+								</div>
+								<div class="pc-qty">Available: ${p.quantity} ${p.unit}</div>
+
+								<c:if test="${not empty p.description}">
+									<p class="pc-desc">
+										<c:choose>
+											<c:when test="${fn:length(p.description) gt 60}">
+												<c:out value="${fn:substring(p.description, 0, 60)}" />...
+                                        </c:when>
+											<c:otherwise>
+												<c:out value="${p.description}" />
+											</c:otherwise>
+										</c:choose>
+									</p>
+								</c:if>
+							</div>
+
+							<c:choose>
+								<c:when test="${p.quantity gt 0}">
+									<div style="padding: 0 14px 14px;">
+										<form action="${ctx}/placeorder" method="post"
+											class="order-form">
+											<input type="hidden" name="productId" value="${p.id}">
+											<input type="number" name="quantity" min="1"
+												max="${p.quantity}" value="1" class="qty-input">
+											<button type="submit" class="btn btn-primary btn-sm">Order</button>
+										</form>
+									</div>
+								</c:when>
+								<c:otherwise>
+									<div style="padding: 0 14px 14px;">
+										<span class="badge badge-rejected">Out of Stock</span>
+									</div>
+								</c:otherwise>
+							</c:choose>
+						</div>
+					</c:forEach>
+				</div>
+			</c:otherwise>
+		</c:choose>
+	</div>
+
+	<%@ include file="/WEB-INF/includes/footer.jsp"%>
+
 </body>
 </html>

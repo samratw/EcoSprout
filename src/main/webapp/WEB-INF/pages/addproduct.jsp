@@ -18,7 +18,7 @@
     <div class="page-header">
         <h1>Add New Product</h1>
         <p>List a new agro product on EcoSprout.</p>
-    </div>
+    </div> 
 
     <%@ include file="/WEB-INF/includes/messages.jsp" %>
 

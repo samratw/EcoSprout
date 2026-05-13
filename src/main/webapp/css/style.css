@@ -469,8 +469,18 @@ table tr:hover td {
 	transition: color 0.2s;
 }
 
-.wishlist-btn.active {
-	color: var(--danger);
+.wishlist-icon {
+    font-size: 28px;
+    color: #bbb;
+    transition: 0.3s ease;
+}
+
+.wishlist-icon.filled {
+    color: red;
+}
+
+.wishlist-icon:hover {
+    transform: scale(1.1);
 }
 
 /* ===== Sidebar Quick Links ===== */
@@ -555,4 +565,269 @@ footer a {
 	.product-grid {
 		grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
 	}
+	.nav-links a {
+		margin-left: 10px;
+		font-size: 0.85rem;
+	}
+	.footer-grid {
+		grid-template-columns: 1fr;
+	}
 }
+
+/* ============================================================
+ * v2 layout helpers (used by the refactored JSTL-only JSPs)
+ * ============================================================ */
+
+/* New navbar: padded brand + nav-links container */
+.navbar { padding: 10px 24px; }
+.brand-link { display: inline-flex; align-items: center; }
+.brand-link img { display: block; }
+.nav-links { display: flex; align-items: center; flex-wrap: wrap; }
+.nav-links a {
+	color: white;
+	text-decoration: none;
+	margin-left: 18px;
+	font-size: 0.95rem;
+	transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--green-mid); }
+.nav-links a.logout {
+	background: var(--accent);
+	color: white;
+	padding: 6px 14px;
+	border-radius: 20px;
+}
+.nav-links a.logout:hover { background: #e07000; }
+
+/* Hero (homepage) */
+.hero {
+	min-height: 80vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	padding: 40px 20px;
+	color: white;
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+.hero h1 { font-size: 2.4rem; margin-bottom: 10px; color: white; }
+.hero p  { font-size: 1.05rem; max-width: 640px; opacity: 0.92; margin-top: 10px; }
+
+.btn-light {
+	margin-top: 22px;
+	padding: 12px 24px;
+	background: white;
+	color: var(--green-dark);
+	border: none;
+	border-radius: 25px;
+	cursor: pointer;
+	font-weight: bold;
+	text-decoration: none;
+}
+.btn-light:hover { background: #f4f7f5; }
+
+/* Feature cards on home */
+.features {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+	gap: 20px;
+	padding: 50px;
+}
+.features .card { text-align: center; }
+.features .card h3 { color: var(--green-dark); margin-bottom: 8px; }
+
+/* Mission band on home & about */
+.mission-band {
+	padding: 60px 20px;
+	background: #f4f7f5;
+	text-align: center;
+}
+.mission-band h2 {
+	color: var(--green-dark);
+	font-size: 1.7rem;
+	margin: 10px 0 18px;
+}
+.mission-band p {
+	max-width: 900px;
+	margin: 0 auto 20px;
+	color: var(--text-dark);
+	line-height: 1.7;
+}
+.offer-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 18px;
+	margin-top: 22px;
+}
+.offer-tile {
+	padding: 18px;
+	background: var(--green-pale);
+	border-radius: var(--radius);
+	text-align: left;
+}
+.offer-tile h3 { color: var(--green-dark); margin: 8px 0 4px; }
+.offer-icon { font-size: 1.6rem; }
+
+/* About hero card */
+.hero-card {
+	text-align: center;
+	padding: 48px 32px;
+	background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
+	color: white;
+}
+.hero-card h1 { color: white; font-size: 2.2rem; margin: 16px 0 8px; }
+.hero-card p  { font-size: 1.05rem; opacity: 0.92; }
+
+/* Contact info grid */
+.info-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	gap: 16px;
+	margin-bottom: 24px;
+}
+.info-icon { font-size: 1.8rem; }
+.card.center { text-align: center; }
+.center { text-align: center; }
+
+/* Product card helpers (buyer & vendor) */
+.product-placeholder {
+	height: 160px;
+	background: var(--green-light);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 2.5rem;
+}
+.row-between {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+.pc-desc {
+	font-size: 0.82rem;
+	color: var(--text-light);
+	margin-top: 6px;
+}
+.order-form {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+}
+.qty-input {
+	width: 70px;
+	padding: 6px;
+	border: 1px solid var(--border);
+	border-radius: 6px;
+	font-size: 0.9rem;
+}
+.thumb {
+	width: 50px;
+	height: 40px;
+	object-fit: cover;
+	border-radius: 4px;
+}
+
+/* New rich site footer */
+.site-footer {
+	background: var(--green-dark);
+	color: #d8f3dc;
+	margin-top: 40px;
+	padding: 30px 24px 0;
+	font-size: 0.92rem;
+}
+.footer-grid {
+	max-width: 1100px;
+	margin: 0 auto;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 28px;
+	padding-bottom: 24px;
+}
+.footer-col h4 {
+	color: white;
+	margin-bottom: 10px;
+	font-size: 1rem;
+	letter-spacing: 0.4px;
+}
+.footer-col p,
+.footer-col li {
+	color: #c7e6cf;
+	line-height: 1.6;
+	font-size: 0.88rem;
+}
+.footer-col ul { list-style: none; padding: 0; }
+.footer-col ul li { margin-bottom: 4px; }
+.footer-col a {
+	color: #b7e4c7;
+	text-decoration: none;
+}
+.footer-col a:hover { color: white; }
+.footer-contact li { color: #c7e6cf; }
+.footer-bottom {
+	max-width: 1100px;
+	margin: 0 auto;
+	border-top: 1px solid rgba(255,255,255,0.12);
+	padding: 14px 0 18px;
+	text-align: center;
+	color: #b7e4c7;
+	font-size: 0.85rem;
+}
+
+/* Profile / My Orders / Reports */
+.two-col {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+	gap: 20px;
+}
+.profile-summary {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	padding-bottom: 14px;
+	border-bottom: 1px solid var(--green-light);
+}
+.profile-avatar {
+	width: 60px;
+	height: 60px;
+	border-radius: 50%;
+	background: var(--green-mid);
+	color: white;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: 700;
+	font-size: 1.6rem;
+	text-transform: uppercase;
+}
+.profile-name {
+	font-size: 1.1rem;
+	font-weight: 600;
+	color: var(--green-dark);
+}
+.profile-meta {
+	margin-top: 4px;
+	display: flex;
+	gap: 6px;
+	flex-wrap: wrap;
+}
+.report-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+.report-table th,
+.report-table td {
+	padding: 8px 10px;
+	border-bottom: 1px solid var(--green-light);
+	text-align: left;
+	font-size: 0.92rem;
+}
+.report-table th {
+	background: var(--green-pale);
+	color: var(--green-dark);
+}
+.report-table tr:last-child td { border-bottom: none; }

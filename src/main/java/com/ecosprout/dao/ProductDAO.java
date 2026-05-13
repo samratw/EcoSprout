@@ -5,19 +5,15 @@ import java.util.*;
 import com.ecosprout.model.ProductModel;
 import com.ecosprout.util.DBUtil;
 
-/**
- * ProductDAO - Data Access Object for product-related database operations.
- */
+/** DAO for product-related database operations. */
 public class ProductDAO {
 
-    /**
-     * Adds a new product to the database.
-     */
+    /** Insert a new product. */
     public boolean addProduct(ProductModel p) throws SQLException {
-        String sql = "INSERT INTO products(name, category, description, price, quantity, unit, image, vendor_id) VALUES(?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO products(name, category, description, price, quantity, unit, image, vendor_id) "
+                   + "VALUES(?,?,?,?,?,?,?,?)";
         try (Connection con = DBUtil.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
-
             ps.setString(1, p.getName());
             ps.setString(2, p.getCategory());
             ps.setString(3, p.getDescription());
@@ -26,31 +22,27 @@ public class ProductDAO {
             ps.setString(6, p.getUnit());
             ps.setString(7, p.getImage());
             ps.setInt(8, p.getVendorId());
-
             return ps.executeUpdate() > 0;
         }
     }
 
-    /**
-     * Returns all products (admin view).
-     */
+    /** All products (newest first). */
     public List<ProductModel> getAllProducts() throws SQLException {
         List<ProductModel> list = new ArrayList<>();
-        String sql = "SELECT * FROM products ORDER BY created_at DESC";
         try (Connection con = DBUtil.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql);
+             PreparedStatement ps = con.prepareStatement(
+                "SELECT * FROM products ORDER BY created_at DESC");
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) list.add(mapRow(rs));
         }
         return list;
     }
 
-    /**
-     * Returns all products matching a search keyword in name or category.
-     */
+    /** Products matching a keyword in name or category. */
     public List<ProductModel> searchProducts(String keyword) throws SQLException {
         List<ProductModel> list = new ArrayList<>();
-        String sql = "SELECT * FROM products WHERE name LIKE ? OR category LIKE ? ORDER BY created_at DESC";
+        String sql = "SELECT * FROM products WHERE name LIKE ? OR category LIKE ? "
+                   + "ORDER BY created_at DESC";
         try (Connection con = DBUtil.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             String kw = "%" + keyword + "%";
@@ -62,14 +54,12 @@ public class ProductDAO {
         return list;
     }
 
-    /**
-     * Returns all products belonging to a specific vendor.
-     */
+    /** Products belonging to a vendor. */
     public List<ProductModel> getProductsByVendor(int vendorId) throws SQLException {
         List<ProductModel> list = new ArrayList<>();
-        String sql = "SELECT * FROM products WHERE vendor_id=? ORDER BY created_at DESC";
         try (Connection con = DBUtil.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+             PreparedStatement ps = con.prepareStatement(
+                "SELECT * FROM products WHERE vendor_id=? ORDER BY created_at DESC")) {
             ps.setInt(1, vendorId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) list.add(mapRow(rs));
@@ -77,25 +67,20 @@ public class ProductDAO {
         return list;
     }
 
-    /**
-     * Retrieves a single product by its ID.
-     */
+    /** Get a single product by id. */
     public ProductModel getProductById(int id) throws SQLException {
-        String sql = "SELECT * FROM products WHERE id=?";
         try (Connection con = DBUtil.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+             PreparedStatement ps = con.prepareStatement("SELECT * FROM products WHERE id=?")) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) return mapRow(rs);
+            return rs.next() ? mapRow(rs) : null;
         }
-        return null;
     }
 
-    /**
-     * Updates a product's details.
-     */
+    /** Update a product. */
     public boolean updateProduct(ProductModel p) throws SQLException {
-        String sql = "UPDATE products SET name=?, category=?, description=?, price=?, quantity=?, unit=?, status=? WHERE id=?";
+        String sql = "UPDATE products SET name=?, category=?, description=?, price=?, "
+                   + "quantity=?, unit=?, status=? WHERE id=?";
         try (Connection con = DBUtil.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, p.getName());
@@ -110,33 +95,37 @@ public class ProductDAO {
         }
     }
 
-    /**
-     * Deletes a product by its ID.
-     */
+    /** Delete by id. */
     public boolean deleteProduct(int id) throws SQLException {
-        String sql = "DELETE FROM products WHERE id=?";
         try (Connection con = DBUtil.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
+             PreparedStatement ps = con.prepareStatement("DELETE FROM products WHERE id=?")) {
             ps.setInt(1, id);
             return ps.executeUpdate() > 0;
         }
     }
 
-    /**
-     * Returns the total count of products in the database.
-     */
+    /** Total product count. */
     public int countProducts() throws SQLException {
-        String sql = "SELECT COUNT(*) FROM products";
         try (Connection con = DBUtil.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql);
+             PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM products");
              ResultSet rs = ps.executeQuery()) {
             return rs.next() ? rs.getInt(1) : 0;
         }
     }
 
-    /**
-     * Maps a ResultSet row to a ProductModel object.
-     */
+    /** Products grouped by category (category -> count). */
+    public Map<String, Integer> countByCategory() throws SQLException {
+        Map<String, Integer> map = new LinkedHashMap<>();
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(
+                "SELECT category, COUNT(*) AS c FROM products GROUP BY category ORDER BY c DESC");
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) map.put(rs.getString("category"), rs.getInt("c"));
+        }
+        return map;
+    }
+
+    /** Map a ResultSet row to a ProductModel. */
     private ProductModel mapRow(ResultSet rs) throws SQLException {
         ProductModel p = new ProductModel();
         p.setId(rs.getInt("id"));

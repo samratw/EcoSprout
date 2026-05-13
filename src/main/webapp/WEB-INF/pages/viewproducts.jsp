@@ -1,59 +1,85 @@
-<%@ page contentType="text/html;charset=UTF-8" import="com.ecosprout.model.ProductModel,java.util.*" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/includes/taglibs.jsp" %>
+<c:set var="pageTitle" value="All Products" scope="request"/>
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>All Products - EcoSprout</title>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <%@ include file="/WEB-INF/includes/head.jsp" %>
 </head>
 <body>
-<nav class="navbar">
-  <a href="admin" class="brand">🌱 Eco<span>Sprout</span></a>
-  <nav>
-    <a href="admin">Dashboard</a><a href="manageusers">Users</a>
-    <a href="addproduct">Add Product</a><a href="logout" class="logout">Logout</a>
-  </nav>
-</nav>
+
+<%@ include file="/WEB-INF/includes/navbar.jsp" %>
+
 <div class="page">
-  <div class="page-header"><h1>All Products</h1><p>View and manage all product listings on EcoSprout.</p></div>
-
-  <% String error = (String) request.getAttribute("error");
-     if (error != null) { %><div class="alert alert-error"><%= error %></div><% } %>
-
-  <div class="card">
-    <div class="table-wrap">
-    <table>
-      <tr><th>ID</th><th>Image</th><th>Name</th><th>Category</th><th>Price (NPR)</th><th>Qty</th><th>Status</th><th>Actions</th></tr>
-      <%
-        List<ProductModel> products = (List<ProductModel>) request.getAttribute("products");
-        if (products != null) {
-          for (ProductModel p : products) {
-      %>
-      <tr>
-        <td><%= p.getId() %></td>
-        <td>
-          <% if (p.getImage() != null) { %>
-            <img src="${pageContext.request.contextPath}/images/<%= p.getImage() %>"
-                 style="width:50px;height:40px;object-fit:cover;border-radius:4px;">
-          <% } else { %> 🌾 <% } %>
-        </td>
-        <td><strong><%= p.getName() %></strong></td>
-        <td><%= p.getCategory() %></td>
-        <td><%= String.format("%.2f", p.getPrice()) %> / <%= p.getUnit() %></td>
-        <td><%= p.getQuantity() %></td>
-        <td><span class="badge badge-<%= p.getStatus() %>"><%= p.getStatus() %></span></td>
-        <td>
-          <a href="updateproduct?id=<%= p.getId() %>" class="btn btn-warning btn-sm">Edit</a>
-          <a href="deleteproduct?id=<%= p.getId() %>" class="btn btn-danger btn-sm"
-             onclick="return confirm('Are you sure you want to delete this product?')">Delete</a>
-        </td>
-      </tr>
-      <% }} %>
-    </table>
+    <div class="page-header">
+        <h1>All Products</h1>
+        <p>View and manage all product listings on EcoSprout.</p>
     </div>
-  </div>
-  <a href="admin" class="btn btn-outline">← Back to Dashboard</a>
+
+    <%@ include file="/WEB-INF/includes/messages.jsp" %>
+
+    <div class="card">
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Price (NPR)</th>
+                        <th>Qty</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="p" items="${products}">
+                        <tr>
+                            <td>${p.id}</td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${not empty p.image}">
+                                        <img src="${ctx}/images/${p.image}"
+                                             class="thumb"
+                                             alt="${p.name}">
+                                    </c:when>
+                                    <c:otherwise>&#x1F33E;</c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td><strong><c:out value="${p.name}"/></strong></td>
+                            <td><c:out value="${p.category}"/></td>
+                            <td>
+                                <fmt:formatNumber value="${p.price}" minFractionDigits="2" maxFractionDigits="2"/>
+                                / ${p.unit}
+                            </td>
+                            <td>${p.quantity}</td>
+                            <td><span class="badge badge-${p.status}">${p.status}</span></td>
+                            <td>
+                                <a href="${ctx}/updateproduct?id=${p.id}" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="${ctx}/deleteproduct?id=${p.id}" class="btn btn-danger btn-sm"
+                                   onclick="return confirm('Are you sure you want to delete this product?')">Delete</a>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    <c:if test="${empty products}">
+                        <tr>
+                            <td colspan="8" style="text-align:center; color:var(--text-light); padding:24px;">
+                                No products listed yet.
+                            </td>
+                        </tr>
+                    </c:if>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <a href="${ctx}/admin" class="btn btn-outline" style="margin-top:16px;">&larr; Back to Dashboard</a>
 </div>
-<footer>&copy; 2026 EcoSprout</footer>
+
+<%@ include file="/WEB-INF/includes/footer.jsp" %>
+
 </body>
 </html>

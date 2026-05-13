@@ -58,7 +58,7 @@
         EcoSprout is an online agro-product marketplace that bridges the gap
         between local farmers and consumers. We provide a transparent, fair,
         and efficient platform where vendors can list their fresh produce and
-        buyers can access quality agro-products directly from the source &mdash;
+        buyers can access quality agro-products directly from the source,
         eliminating unnecessary middlemen.
     </p>
 

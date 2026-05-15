@@ -27,12 +27,14 @@
             <div class="form-group">
                 <label for="email">Email Address</label>
                 <input type="email" id="email" name="email"
-                       placeholder="your@gmail.com" required>
+                       placeholder="your@gmail.com"
+                       value="${emailPrev}" required>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password"
-                       placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" required>
+                       placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
+                       minlength="6" required>
             </div>
             <button type="submit" class="btn btn-primary btn-full" style="margin-top:8px;">
                 Login

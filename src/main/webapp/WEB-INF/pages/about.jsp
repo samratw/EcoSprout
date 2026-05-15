@@ -35,25 +35,25 @@
             <h2>What We Offer</h2>
             <div class="offer-grid">
                 <div class="offer-tile">
-                    <div class="offer-icon">&#x1F468;&#x200D;&#x1F33E;</div>
+                    <div class="offer-icon"></div>
                     <h3>For Vendors</h3>
                     <p>List and manage your agro products, set prices, track inventory,
                        and reach buyers across Nepal.</p>
                 </div>
                 <div class="offer-tile">
-                    <div class="offer-icon">&#x1F6D2;</div>
+                    <div class="offer-icon"></div>
                     <h3>For Buyers</h3>
                     <p>Browse fresh products, search by category, wishlist your
                        favorites, and place orders easily.</p>
                 </div>
                 <div class="offer-tile">
-                    <div class="offer-icon">&#x1F510;</div>
+                    <div class="offer-icon"></div>
                     <h3>Secure Platform</h3>
                     <p>Role-based access control and admin verification ensure a
                        trusted marketplace environment.</p>
                 </div>
                 <div class="offer-tile">
-                    <div class="offer-icon">&#x1F4CA;</div>
+                    <div class="offer-icon"></div>
                     <h3>Admin Control</h3>
                     <p>Full administrative dashboard with user management, product
                        oversight, and order tracking.</p>
@@ -64,9 +64,9 @@
         <div class="card">
             <h2>Technology Stack</h2>
             <p>
-                EcoSprout is built using <strong>Java EE</strong> with
-                <strong>JSP / Servlet</strong> following the
-                <strong>MVC</strong> architecture, <strong>MySQL</strong> for
+                EcoSprout is built using <strong>Java EE</strong>with
+                <strong>JSP / Servlet</strong>following the
+                <strong>MVC</strong>architecture, <strong>MySQL</strong>for
                 persistence, and pure <strong>HTML &amp; CSS (Flexbox)</strong>
                 for a responsive UI. The codebase follows best practices
                 including prepared statements to prevent SQL injection,

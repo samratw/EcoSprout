@@ -14,18 +14,34 @@ public class UserService {
 
     /** Register a user. Returns null on success or an error message. */
     public String register(UserModel u) throws SQLException {
-        if (u.getName() == null || !u.getName().matches("[a-zA-Z ]+"))
-            return "Full name must contain letters only.";
-        if (u.getEmail() == null || !u.getEmail().matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$"))
+        // Required-field checks first so user sees a clear message
+        if (u.getName() == null || u.getName().trim().isEmpty())
+            return "Full name is required.";
+        if (u.getEmail() == null || u.getEmail().trim().isEmpty())
+            return "Email address is required.";
+        if (u.getPhone() == null || u.getPhone().trim().isEmpty())
+            return "Phone number is required.";
+        if (u.getPassword() == null || u.getPassword().isEmpty())
+            return "Password is required.";
+        if (u.getRole() == null || u.getRole().trim().isEmpty())
+            return "Please select a role.";
+
+        // Format checks
+        if (!u.getName().matches("[a-zA-Z ]+"))
+            return "Full name must contain letters and spaces only.";
+        if (!u.getEmail().matches("^[\\w.+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$"))
             return "Please enter a valid email address.";
-        if (u.getPhone() == null || !u.getPhone().matches("\\d{10}"))
+        if (!u.getPhone().matches("\\d{10}"))
             return "Phone number must be exactly 10 digits.";
-        if (u.getPassword() == null || u.getPassword().length() < 6)
+        if (u.getPassword().length() < 6)
             return "Password must be at least 6 characters.";
+
+        // Uniqueness checks
         if (userDAO.emailExists(u.getEmail()))
             return "An account with this email already exists.";
         if (userDAO.phoneExists(u.getPhone()))
             return "An account with this phone number already exists.";
+
         userDAO.register(u);
         return null;
     }

@@ -45,12 +45,12 @@
         <%-- Admin Sidebar --%>
         <aside class="sidebar">
             <div class="side-card">
-                <a href="${ctx}/addproduct">&#x2795; Add Product</a>
-                <a href="${ctx}/viewproducts">&#x1F4E6; View All Products</a>
-                <a href="${ctx}/manageusers">&#x1F465; Manage Users</a>
-                <a href="${ctx}/about">&#x2139;&#xFE0F; About Page</a>
-                <a href="${ctx}/contact">&#x1F4EC; Contact</a>
-                <a href="${ctx}/logout" style="color:var(--danger);">&#x1F6AA; Logout</a>
+                <a href="${ctx}/addproduct">Add Product</a>
+                <a href="${ctx}/viewproducts">View All Products</a>
+                <a href="${ctx}/manageusers">Manage Users</a>
+                <a href="${ctx}/about">About Page</a>
+                <a href="${ctx}/contact">Contact</a>
+                <a href="${ctx}/logout" style="color:var(--danger);">Logout</a>
             </div>
         </aside>
 
@@ -73,6 +73,7 @@
                                         <th>Product</th>
                                         <th>Qty</th>
                                         <th>Total (NPR)</th>
+                                        <th>Location</th>
                                         <th>Status</th>
                                         <th>Date</th>
                                     </tr>
@@ -90,6 +91,7 @@
                                                                   minFractionDigits="2"
                                                                   maxFractionDigits="2"/>
                                             </td>
+                                            <td><c:out value="${o.deliveryLocation}"/></td>
                                             <td>
                                                 <span class="badge badge-${o.status}">${o.status}</span>
                                             </td>

@@ -4,16 +4,18 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 import com.ecosprout.dao.OrderDAO;
+import com.ecosprout.dao.ReviewDAO;
 import com.ecosprout.model.OrderModel;
 import com.ecosprout.model.UserModel;
 
-/** Shows a buyer's order history. */
+/** Shows a buyer's order history. Each row exposes a Review form. */
 @WebServlet("/myorders")
 public class MyOrdersServlet extends HttpServlet {
 
-    private final OrderDAO orderDAO = new OrderDAO();
+    private final OrderDAO  orderDAO  = new OrderDAO();
+    private final ReviewDAO reviewDAO = new ReviewDAO();
 
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
@@ -27,11 +29,20 @@ public class MyOrdersServlet extends HttpServlet {
         try {
             List<OrderModel> orders = orderDAO.getOrdersByBuyer(user.getId());
             double grandTotal = 0;
-            for (OrderModel o : orders) grandTotal += o.getTotalPrice();
+            Map<Integer, Boolean> reviewedMap = new HashMap<>();
+            for (OrderModel o : orders) {
+                grandTotal += o.getTotalPrice();
+                // Skip the DB call if we already checked this productId.
+                if (!reviewedMap.containsKey(o.getProductId())) {
+                    reviewedMap.put(o.getProductId(),
+                                    reviewDAO.hasReviewed(o.getProductId(), user.getId()));
+                }
+            }
 
-            req.setAttribute("orders",     orders);
-            req.setAttribute("orderCount", orders.size());
-            req.setAttribute("grandTotal", grandTotal);
+            req.setAttribute("orders",      orders);
+            req.setAttribute("orderCount",  orders.size());
+            req.setAttribute("grandTotal",  grandTotal);
+            req.setAttribute("reviewedMap", reviewedMap);
         } catch (Exception e) {
             req.setAttribute("error", "Could not load your orders.");
         }

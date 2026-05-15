@@ -44,6 +44,7 @@
             <c:when test="${role eq 'vendor'}">
                 <a href="${ctx}/vendor">Dashboard</a>
                 <a href="${ctx}/addproduct">Add Product</a>
+                <a href="${ctx}/vendororders">Orders</a>
                 <a href="${ctx}/profile">Profile</a>
                 <a href="${ctx}/about">About</a>
                 <a href="${ctx}/contact">Contact</a>

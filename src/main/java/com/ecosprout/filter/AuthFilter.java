@@ -54,7 +54,7 @@ public class AuthFilter implements Filter {
                 || path.equals("/viewproducts") || path.equals("/reports")) {
             if (!"admin".equals(role)) { redirectToDashboard(response, ctx, role); return; }
         }
-        else if (path.equals("/vendor")) {
+        else if (path.equals("/vendor") || path.equals("/vendororders")) {
             if (!"vendor".equals(role)) { redirectToDashboard(response, ctx, role); return; }
         }
         else if (path.equals("/buyer") || path.equals("/placeorder")
@@ -67,7 +67,7 @@ public class AuthFilter implements Filter {
                 redirectToDashboard(response, ctx, role); return;
             }
         }
-        // /profile and /changepassword require any logged-in user (already passed auth)
+        // /profile, /reviews, /product are reachable by any logged-in user.
 
         chain.doFilter(req, res);
     }

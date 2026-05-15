@@ -25,17 +25,17 @@
 
         <div class="info-grid">
             <div class="card center">
-                <div class="info-icon">&#x1F4CD;</div>
+                <div class="info-icon"></div>
                 <h3>Address</h3>
                 <p>Kathmandu, Bagmati Province<br>Nepal</p>
             </div>
             <div class="card center">
-                <div class="info-icon">&#x1F4E7;</div>
+                <div class="info-icon"></div>
                 <h3>Email</h3>
                 <p>support@ecosprout.com.np</p>
             </div>
             <div class="card center">
-                <div class="info-icon">&#x1F550;</div>
+                <div class="info-icon"></div>
                 <h3>Hours</h3>
                 <p>Sun&ndash;Fri: 9 AM &ndash; 6 PM NPT</p>
             </div>

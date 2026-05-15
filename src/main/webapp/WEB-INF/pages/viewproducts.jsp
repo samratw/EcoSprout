@@ -46,7 +46,7 @@
                                              class="thumb"
                                              alt="${p.name}">
                                     </c:when>
-                                    <c:otherwise>&#x1F33E;</c:otherwise>
+                                    <c:otherwise></c:otherwise>
                                 </c:choose>
                             </td>
                             <td><strong><c:out value="${p.name}"/></strong></td>

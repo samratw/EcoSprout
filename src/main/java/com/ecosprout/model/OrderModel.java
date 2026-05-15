@@ -1,14 +1,14 @@
 package com.ecosprout.model;
 
-/**
- * OrderModel - Represents a purchase order placed by a buyer.
- */
+/** Purchase order placed by a buyer. */
 public class OrderModel {
 
-    private int id, buyerId, productId, quantity;
+    private int id, buyerId, productId, quantity, vendorId;
     private double totalPrice;
     private String status, createdAt;
-    private String productName, buyerName; // for display
+    private String productName, buyerName, vendorName;
+    private String deliveryLocation;
+    private boolean deleted;
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
@@ -18,6 +18,9 @@ public class OrderModel {
 
     public int getProductId() { return productId; }
     public void setProductId(int productId) { this.productId = productId; }
+
+    public int getVendorId() { return vendorId; }
+    public void setVendorId(int vendorId) { this.vendorId = vendorId; }
 
     public int getQuantity() { return quantity; }
     public void setQuantity(int quantity) { this.quantity = quantity; }
@@ -36,4 +39,13 @@ public class OrderModel {
 
     public String getBuyerName() { return buyerName; }
     public void setBuyerName(String buyerName) { this.buyerName = buyerName; }
+
+    public String getVendorName() { return vendorName; }
+    public void setVendorName(String vendorName) { this.vendorName = vendorName; }
+
+    public String getDeliveryLocation() { return deliveryLocation; }
+    public void setDeliveryLocation(String deliveryLocation) { this.deliveryLocation = deliveryLocation; }
+
+    public boolean isDeleted() { return deleted; }
+    public void setDeleted(boolean deleted) { this.deleted = deleted; }
 }

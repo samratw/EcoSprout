@@ -1,13 +1,12 @@
 package com.ecosprout.model;
 
-/**
- * ProductModel - Represents an agro product listed on EcoSprout.
- */
+/** Agro product listed on EcoSprout. */
 public class ProductModel {
 
-    private int id, vendorId, quantity;
+    private int id, vendorId, quantity, reviewCount;
     private String name, category, description, unit, image, status;
-    private double price;
+    private double price, avgRating;
+    private boolean deleted;
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
@@ -38,4 +37,13 @@ public class ProductModel {
 
     public double getPrice() { return price; }
     public void setPrice(double price) { this.price = price; }
+
+    public double getAvgRating() { return avgRating; }
+    public void setAvgRating(double avgRating) { this.avgRating = avgRating; }
+
+    public int getReviewCount() { return reviewCount; }
+    public void setReviewCount(int reviewCount) { this.reviewCount = reviewCount; }
+
+    public boolean isDeleted() { return deleted; }
+    public void setDeleted(boolean deleted) { this.deleted = deleted; }
 }

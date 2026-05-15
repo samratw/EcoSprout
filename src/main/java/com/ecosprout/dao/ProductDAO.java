@@ -5,8 +5,17 @@ import java.util.*;
 import com.ecosprout.model.ProductModel;
 import com.ecosprout.util.DBUtil;
 
-/** DAO for product-related database operations. */
+/** DAO for product-related database operations. Soft-delete aware. */
 public class ProductDAO {
+
+    /** Common SELECT joining ratings, filtering out soft-deleted rows. */
+    private static final String BASE_SELECT =
+        "SELECT p.*, "
+      + "       COALESCE(AVG(r.rating), 0)            AS avg_rating, "
+      + "       COUNT(CASE WHEN r.is_deleted=0 THEN r.id END) AS review_count "
+      + "FROM products p "
+      + "LEFT JOIN reviews r ON r.product_id = p.id AND r.is_deleted = 0 "
+      + "WHERE p.is_deleted = 0 ";
 
     /** Insert a new product. */
     public boolean addProduct(ProductModel p) throws SQLException {
@@ -28,56 +37,51 @@ public class ProductDAO {
 
     /** All products (newest first). */
     public List<ProductModel> getAllProducts() throws SQLException {
-        List<ProductModel> list = new ArrayList<>();
-        try (Connection con = DBUtil.getConnection();
-             PreparedStatement ps = con.prepareStatement(
-                "SELECT * FROM products ORDER BY created_at DESC");
-             ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) list.add(mapRow(rs));
-        }
-        return list;
+        return runListQuery(BASE_SELECT + "GROUP BY p.id ORDER BY p.created_at DESC");
     }
 
-    /** Products matching a keyword in name or category. */
+    /** Search by keyword in name or category. */
     public List<ProductModel> searchProducts(String keyword) throws SQLException {
+        String kw = (keyword == null) ? "%" : "%" + keyword + "%";
+        String sql = BASE_SELECT
+                   + "AND (p.name LIKE ? OR p.category LIKE ?) "
+                   + "GROUP BY p.id ORDER BY p.created_at DESC";
         List<ProductModel> list = new ArrayList<>();
-        String sql = "SELECT * FROM products WHERE name LIKE ? OR category LIKE ? "
-                   + "ORDER BY created_at DESC";
         try (Connection con = DBUtil.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
-            String kw = "%" + keyword + "%";
             ps.setString(1, kw);
             ps.setString(2, kw);
             ResultSet rs = ps.executeQuery();
-            while (rs.next()) list.add(mapRow(rs));
+            while (rs.next()) list.add(mapRowWithRating(rs));
         }
         return list;
     }
 
     /** Products belonging to a vendor. */
     public List<ProductModel> getProductsByVendor(int vendorId) throws SQLException {
+        String sql = BASE_SELECT + "AND p.vendor_id=? GROUP BY p.id ORDER BY p.created_at DESC";
         List<ProductModel> list = new ArrayList<>();
         try (Connection con = DBUtil.getConnection();
-             PreparedStatement ps = con.prepareStatement(
-                "SELECT * FROM products WHERE vendor_id=? ORDER BY created_at DESC")) {
+             PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, vendorId);
             ResultSet rs = ps.executeQuery();
-            while (rs.next()) list.add(mapRow(rs));
+            while (rs.next()) list.add(mapRowWithRating(rs));
         }
         return list;
     }
 
-    /** Get a single product by id. */
+    /** Get one product by id (still must be non-deleted). */
     public ProductModel getProductById(int id) throws SQLException {
+        String sql = BASE_SELECT + "AND p.id=? GROUP BY p.id";
         try (Connection con = DBUtil.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT * FROM products WHERE id=?")) {
+             PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
-            return rs.next() ? mapRow(rs) : null;
+            return rs.next() ? mapRowWithRating(rs) : null;
         }
     }
 
-    /** Update a product. */
+    /** Update product details. */
     public boolean updateProduct(ProductModel p) throws SQLException {
         String sql = "UPDATE products SET name=?, category=?, description=?, price=?, "
                    + "quantity=?, unit=?, status=? WHERE id=?";
@@ -95,38 +99,50 @@ public class ProductDAO {
         }
     }
 
-    /** Delete by id. */
+    /** Soft-delete: row stays in DB, just flagged so it is filtered out. */
     public boolean deleteProduct(int id) throws SQLException {
         try (Connection con = DBUtil.getConnection();
-             PreparedStatement ps = con.prepareStatement("DELETE FROM products WHERE id=?")) {
+             PreparedStatement ps = con.prepareStatement(
+                "UPDATE products SET is_deleted=1 WHERE id=?")) {
             ps.setInt(1, id);
             return ps.executeUpdate() > 0;
         }
     }
 
-    /** Total product count. */
+    /** Count of non-deleted products. */
     public int countProducts() throws SQLException {
         try (Connection con = DBUtil.getConnection();
-             PreparedStatement ps = con.prepareStatement("SELECT COUNT(*) FROM products");
+             PreparedStatement ps = con.prepareStatement(
+                "SELECT COUNT(*) FROM products WHERE is_deleted=0");
              ResultSet rs = ps.executeQuery()) {
             return rs.next() ? rs.getInt(1) : 0;
         }
     }
 
-    /** Products grouped by category (category -> count). */
+    /** Group non-deleted products by category. */
     public Map<String, Integer> countByCategory() throws SQLException {
         Map<String, Integer> map = new LinkedHashMap<>();
         try (Connection con = DBUtil.getConnection();
              PreparedStatement ps = con.prepareStatement(
-                "SELECT category, COUNT(*) AS c FROM products GROUP BY category ORDER BY c DESC");
+                "SELECT category, COUNT(*) AS c FROM products "
+              + "WHERE is_deleted=0 GROUP BY category ORDER BY c DESC");
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) map.put(rs.getString("category"), rs.getInt("c"));
         }
         return map;
     }
 
-    /** Map a ResultSet row to a ProductModel. */
-    private ProductModel mapRow(ResultSet rs) throws SQLException {
+    private List<ProductModel> runListQuery(String sql) throws SQLException {
+        List<ProductModel> list = new ArrayList<>();
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) list.add(mapRowWithRating(rs));
+        }
+        return list;
+    }
+
+    private ProductModel mapRowWithRating(ResultSet rs) throws SQLException {
         ProductModel p = new ProductModel();
         p.setId(rs.getInt("id"));
         p.setName(rs.getString("name"));
@@ -138,6 +154,9 @@ public class ProductDAO {
         p.setImage(rs.getString("image"));
         p.setVendorId(rs.getInt("vendor_id"));
         p.setStatus(rs.getString("status"));
+        // Optional columns (only present in BASE_SELECT)
+        try { p.setAvgRating(rs.getDouble("avg_rating")); }   catch (SQLException ignore) {}
+        try { p.setReviewCount(rs.getInt("review_count")); }  catch (SQLException ignore) {}
         return p;
     }
 }

@@ -21,7 +21,7 @@
     <%@ include file="/WEB-INF/includes/messages.jsp" %>
 
     <div style="margin-bottom:20px;">
-        <a href="${ctx}/addproduct" class="btn btn-primary">&#x2795; Add New Product</a>
+        <a href="${ctx}/addproduct" class="btn btn-primary">Add New Product</a>
     </div>
 
     <c:choose>
@@ -42,7 +42,7 @@
                                 <img src="${ctx}/images/${p.image}" alt="${p.name}">
                             </c:when>
                             <c:otherwise>
-                                <div class="product-placeholder">&#x1F33E;</div>
+                                <div class="product-placeholder"></div>
                             </c:otherwise>
                         </c:choose>
 

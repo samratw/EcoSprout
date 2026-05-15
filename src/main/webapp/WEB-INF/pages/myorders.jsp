@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/WEB-INF/includes/taglibs.jsp" %>
 <c:set var="pageTitle" value="My Orders" scope="request"/>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
@@ -53,12 +52,17 @@
                                 <th>Product</th>
                                 <th>Qty</th>
                                 <th>Total (NPR)</th>
+                                <th>Location</th>
                                 <th>Status</th>
                                 <th>Date</th>
+                                <th>Review</th>
                             </tr>
                         </thead>
                         <tbody>
                             <c:forEach var="o" items="${orders}">
+
+                                <c:set var="alreadyReviewed" value="${not empty reviewedMap and reviewedMap[o.productId]}"/>
+
                                 <tr>
                                     <td>${o.id}</td>
                                     <td><c:out value="${o.productName}"/></td>
@@ -68,6 +72,7 @@
                                                           minFractionDigits="2"
                                                           maxFractionDigits="2"/>
                                     </td>
+                                    <td><c:out value="${o.deliveryLocation}"/></td>
                                     <td><span class="badge badge-${o.status}">${o.status}</span></td>
                                     <td>
                                         <c:choose>
@@ -77,7 +82,62 @@
                                             <c:otherwise>-</c:otherwise>
                                         </c:choose>
                                     </td>
+                                    <td>
+                                        <c:choose>
+                                            <c:when test="${alreadyReviewed}">
+                                                <span class="star filled">&#9733;</span> Reviewed
+                                            </c:when>
+                                            <c:otherwise>
+                                                <button type="button" class="btn btn-primary btn-sm"
+                                                        onclick="document.getElementById('rev-${o.id}').showModal()">
+                                                    Write Review
+                                                </button>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </td>
                                 </tr>
+
+                                <%-- Review dialog (popup) shown only if not yet reviewed --%>
+                                <c:if test="${not alreadyReviewed}">
+                                    <dialog id="rev-${o.id}" class="order-dialog">
+                                        <form action="${ctx}/reviews" method="post">
+                                            <h2>Review &ndash; <c:out value="${o.productName}"/></h2>
+                                            <p style="color:var(--text-light);">
+                                                Share your thoughts on this product.
+                                            </p>
+                                            <input type="hidden" name="productId" value="${o.productId}">
+
+                                            <div class="form-group">
+                                                <label for="rate-${o.id}">Rating *</label>
+                                                <select id="rate-${o.id}" name="rating" required>
+                                                    <option value="">-- Select --</option>
+                                                    <option value="5">&#9733;&#9733;&#9733;&#9733;&#9733; (5)</option>
+                                                    <option value="4">&#9733;&#9733;&#9733;&#9733;&#9734; (4)</option>
+                                                    <option value="3">&#9733;&#9733;&#9733;&#9734;&#9734; (3)</option>
+                                                    <option value="2">&#9733;&#9733;&#9734;&#9734;&#9734; (2)</option>
+                                                    <option value="1">&#9733;&#9734;&#9734;&#9734;&#9734; (1)</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="cmt-${o.id}">Comment *</label>
+                                                <textarea id="cmt-${o.id}" name="comment" rows="3"
+                                                          placeholder="What did you like or dislike?" required></textarea>
+                                            </div>
+
+                                            <div class="dialog-actions">
+                                                <button type="button" class="btn btn-outline"
+                                                        onclick="document.getElementById('rev-${o.id}').close()">
+                                                    Cancel
+                                                </button>
+                                                <button type="submit" class="btn btn-primary">
+                                                    Submit Review
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </dialog>
+                                </c:if>
+
                             </c:forEach>
                         </tbody>
                     </table>

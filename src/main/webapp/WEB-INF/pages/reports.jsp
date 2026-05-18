@@ -29,6 +29,10 @@
             <div class="stat-number">${totalOrders}</div>
             <div class="stat-label">Orders</div>
         </div>
+        <div class="stat-card">
+            <div class="stat-number">${totalContacts}</div>
+            <div class="stat-label">Contact Messages</div>
+        </div>
     </div>
 
     <div class="two-col">
@@ -133,6 +137,61 @@
             </c:choose>
         </div>
 
+    </div>
+
+    <%-- Recent contact submissions --%>
+    <div class="card">
+        <h2>Recent Contact Messages (${totalContacts})</h2>
+
+        <c:choose>
+            <c:when test="${empty recentContacts}">
+                <p style="color:var(--text-light);">No contact messages yet.</p>
+            </c:when>
+            <c:otherwise>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Subject</th>
+                                <th>Message</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="c" items="${recentContacts}">
+                                <tr>
+                                    <td>${c.id}</td>
+                                    <td><c:out value="${c.name}"/></td>
+                                    <td><c:out value="${c.email}"/></td>
+                                    <td><c:out value="${c.subject}"/></td>
+                                    <td>
+                                        <c:choose>
+                                            <c:when test="${fn:length(c.message) gt 80}">
+                                                <c:out value="${fn:substring(c.message, 0, 80)}"/>&hellip;
+                                            </c:when>
+                                            <c:otherwise>
+                                                <c:out value="${c.message}"/>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </td>
+                                    <td>
+                                        <c:choose>
+                                            <c:when test="${not empty c.createdAt}">
+                                                ${fn:substring(c.createdAt, 0, 10)}
+                                            </c:when>
+                                            <c:otherwise>-</c:otherwise>
+                                        </c:choose>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+            </c:otherwise>
+        </c:choose>
     </div>
 
     <a href="${ctx}/admin" class="btn btn-outline" style="margin-top:16px;">&larr; Back to Dashboard</a>

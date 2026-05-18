@@ -52,9 +52,7 @@
 			</c:when>
 			<c:when test="${role eq 'buyer'}">
 				<a href="${ctx}/buyer">Browse</a>
-				<a href="${ctx}/myorders"> <img src="${ctx}/images/cart.png"
-					alt="Cart" width="20" height="20"> My Orders
-				</a>
+				<a href="${ctx}/myorders">My Orders</a>
 				<a href="${ctx}/profile">Profile</a>
 				<a href="${ctx}/about">About</a>
 				<a href="${ctx}/contact">Contact</a>

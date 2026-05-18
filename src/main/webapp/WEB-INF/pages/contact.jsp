@@ -26,8 +26,7 @@
 			<div class="info-grid">
 				<div class="card center">
 					<div class="info-icon"></div>
-					<img src="${ctx}/images/location.png" alt="Cart" width="30"
-						height="30">
+					<img src="${ctx}/images/location.png" alt="Cart" width="30" height="30">
 					<h3>Address</h3>
 					<p>
 						Kathmandu, Bagmati Province<br>Nepal
@@ -54,30 +53,34 @@
 
 					<div class="form-row">
 						<div class="form-group">
-							<label for="name">Full Name *</label> <input type="text"
-								id="name" name="name" placeholder="Your name" required>
+							<label for="name">Full Name *</label>
+							<input type="text" id="name" name="name"
+								   placeholder="Your name" maxlength="100"
+								   value="${namePrev}" required>
 						</div>
 						<div class="form-group">
-							<label for="email">Email *</label> <input type="email" id="email"
-								name="email" placeholder="your@email.com" required>
+							<label for="email">Email *</label>
+							<input type="email" id="email" name="email"
+								   placeholder="your@email.com" maxlength="150"
+								   value="${emailPrev}" required>
 						</div>
 					</div>
 
 					<%-- Subject list pushed by ContactServlet from AppConfig.CONTACT_SUBJECTS --%>
 					<div class="form-group">
-						<label for="subject">Subject *</label> <select id="subject"
-							name="subject" required>
+						<label for="subject">Subject *</label>
+						<select id="subject" name="subject" required>
 							<option value="">-- Select Subject --</option>
 							<c:forEach var="s" items="${contactSubjects}">
-								<option value="${s}">${s}</option>
+								<option value="${s}" <c:if test="${s eq subjectPrev}">selected</c:if>>${s}</option>
 							</c:forEach>
 						</select>
 					</div>
 
 					<div class="form-group">
 						<label for="message">Message *</label>
-						<textarea id="message" name="message" rows="5"
-							placeholder="How can we help you?" required></textarea>
+						<textarea id="message" name="message" rows="5" maxlength="5000"
+								  placeholder="How can we help you?" required><c:out value="${messagePrev}"/></textarea>
 					</div>
 
 					<button type="submit" class="btn btn-primary">Send Message</button>

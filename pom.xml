@@ -55,13 +55,6 @@
             <artifactId>commons-fileupload</artifactId>
             <version>1.5</version>
         </dependency>
-       
-       <!--Hashing using bycrpt-->
-        <dependency>
-    <groupId>org.mindrot</groupId>
-    <artifactId>jbcrypt</artifactId>
-    <version>0.4</version>
-</dependency>
 
     </dependencies>
 

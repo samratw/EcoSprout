@@ -14,7 +14,7 @@
 
 <%@ include file="/WEB-INF/includes/navbar.jsp" %>
 
-<div class="page">
+<div class="page page-narrow">
     <div class="page-header">
         <h1>Update Product</h1>
         <p>Edit the product details below.</p>
@@ -24,7 +24,7 @@
 
     <c:choose>
         <c:when test="${not empty product}">
-            <div class="card" style="max-width:680px;">
+            <div class="card card-narrow">
                 <form action="${ctx}/updateproduct" method="post">
                     <input type="hidden" name="id" value="${product.id}">
 
@@ -93,7 +93,7 @@
                         </select>
                     </div>
 
-                    <div style="display:flex; gap:12px; margin-top:8px;">
+                    <div class="form-buttons">
                         <button type="submit" class="btn btn-warning">Save Changes</button>
                         <a href="${homeUrl}" class="btn btn-outline">Cancel</a>
                     </div>

@@ -983,3 +983,39 @@ footer a {
 @media (max-width: 768px) {
 	.product-detail { grid-template-columns: 1fr; }
 }
+
+/* ============================================================
+ *  Centering helpers (forms, popups, narrow cards)
+ * ============================================================ */
+.card-narrow {
+	max-width: 680px;
+	margin: 0 auto;          /* horizontal centering */
+}
+.card-narrow-sm {
+	max-width: 520px;
+	margin: 0 auto;
+}
+.page-narrow {
+	max-width: 760px;
+	margin: 0 auto;
+}
+.text-center { text-align: center; }
+.form-buttons {
+	display: flex;
+	gap: 12px;
+	justify-content: center;  /* center action buttons */
+	margin-top: 12px;
+}
+
+/* Page header inside narrow flow */
+.page-narrow .page-header {
+	text-align: center;
+}
+
+/* Order / Review dialog already centered by browser via <dialog>.showModal().
+ * These tweaks make its inner content centered too. */
+.order-dialog .form-group label { font-weight: 600; }
+.order-dialog .dialog-actions  { justify-content: center; }
+.order-dialog                  { text-align: center; }
+.order-dialog .form-group      { text-align: left; }   /* labels and inputs read left-to-right */
+

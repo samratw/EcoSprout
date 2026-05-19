@@ -14,7 +14,7 @@
 
 <%@ include file="/WEB-INF/includes/navbar.jsp" %>
 
-<div class="page">
+<div class="page page-narrow">
     <div class="page-header">
         <h1>Add New Product</h1>
         <p>List a new agro product on EcoSprout.</p>
@@ -22,7 +22,7 @@
 
     <%@ include file="/WEB-INF/includes/messages.jsp" %>
 
-    <div class="card" style="max-width:680px;">
+    <div class="card card-narrow">
         <form action="${ctx}/addproduct" method="post" enctype="multipart/form-data">
 
             <div class="form-group">
@@ -79,7 +79,7 @@
                 <small style="color:var(--text-light);">Max 5MB. JPG, PNG accepted.</small>
             </div>
 
-            <div style="display:flex; gap:12px; margin-top:8px;">
+            <div class="form-buttons">
                 <button type="submit" class="btn btn-primary">Add Product</button>
                 <a href="${homeUrl}" class="btn btn-outline">Cancel</a>
             </div>

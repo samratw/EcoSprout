@@ -7,5 +7,5 @@
         <c:otherwise>EcoSprout</c:otherwise>
     </c:choose>
 </title>
-<link rel="icon" type="image/png" href="${pageContext.request.contextPath}/images/logo.png">
+<link rel="icon" type="image/png" href="${pageContext.request.contextPath}/images/favicon.png">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">

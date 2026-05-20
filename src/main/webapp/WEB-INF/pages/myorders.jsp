@@ -64,8 +64,15 @@
                                 <c:set var="alreadyReviewed" value="${not empty reviewedMap and reviewedMap[o.productId]}"/>
 
                                 <tr>
-                                    <td>${o.id}</td>
-                                    <td><c:out value="${o.productName}"/></td>
+                                    <td>
+                                        <a href="${ctx}/orderdetail?id=${o.id}">#${o.id}</a>
+                                    </td>
+                                    <td>
+                                        <a href="${ctx}/orderdetail?id=${o.id}"
+                                           style="color:inherit; text-decoration:none;">
+                                            <c:out value="${o.productName}"/>
+                                        </a>
+                                    </td>
                                     <td>${o.quantity}</td>
                                     <td>
                                         <fmt:formatNumber value="${o.totalPrice}"

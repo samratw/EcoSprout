@@ -35,10 +35,10 @@
 				<a href="${ctx}/admin">Dashboard</a>
 				<a href="${ctx}/viewproducts">Products</a>
 				<a href="${ctx}/manageusers">Users</a>
+				<a href="${ctx}/managecontacts">Messages</a>
 				<a href="${ctx}/reports">Reports</a>
 				<a href="${ctx}/profile">Profile</a>
 				<a href="${ctx}/about">About</a>
-				<a href="${ctx}/contact">Contact</a>
 				<a href="${ctx}/logout" class="logout">Logout</a>
 			</c:when>
 			<c:when test="${role eq 'vendor'}">
@@ -60,6 +60,7 @@
 			</c:when>
 			<c:otherwise>
 				<a href="${ctx}/">Home</a>
+				<a href="${ctx}/products">Products</a>
 				<a href="${ctx}/about">About</a>
 				<a href="${ctx}/contact">Contact</a>
 				<a href="${ctx}/login">Login</a>

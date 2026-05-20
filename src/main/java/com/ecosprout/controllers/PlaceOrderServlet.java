@@ -75,6 +75,16 @@ public class PlaceOrderServlet extends HttpServlet {
                 return;
             }
 
+            // Reduce stock first; the DAO guard fails if another buyer
+            // grabbed the last units between the check above and now.
+            boolean stockReduced = productService.decreaseStock(productId, qty);
+            if (!stockReduced) {
+                req.getSession().setAttribute("orderError",
+                    "Sorry, " + p.getName() + " just went out of stock.");
+                res.sendRedirect(req.getContextPath() + "/buyer");
+                return;
+            }
+
             OrderModel order = new OrderModel();
             order.setBuyerId(buyer.getId());
             order.setProductId(productId);
@@ -84,7 +94,8 @@ public class PlaceOrderServlet extends HttpServlet {
             orderDAO.placeOrder(order);
 
             req.getSession().setAttribute("orderSuccess",
-                "Order placed successfully for " + p.getName() + ".");
+                "Order placed successfully for " + p.getName()
+                + ". Remaining stock: " + (p.getQuantity() - qty) + " " + p.getUnit() + ".");
         } catch (Exception e) {
             req.getSession().setAttribute("orderError",
                 "Could not place order. Please try again.");

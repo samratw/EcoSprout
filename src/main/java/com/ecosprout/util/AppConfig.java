@@ -58,4 +58,14 @@ public class AppConfig {
         "Technical Issue",
         "Other"
     );
+
+    /** Order lifecycle statuses. key = stored value, value = display label. */
+    public static final Map<String, String> ORDER_STATUSES = new LinkedHashMap<>();
+    static {
+        ORDER_STATUSES.put("pending",   "Pending");
+        ORDER_STATUSES.put("accepted",  "Accepted");
+        ORDER_STATUSES.put("shipped",   "Shipped");
+        ORDER_STATUSES.put("delivered", "Delivered");
+        ORDER_STATUSES.put("cancelled", "Cancelled");
+    }
 }

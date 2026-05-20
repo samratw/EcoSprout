@@ -99,6 +99,29 @@ public class ProductDAO {
         }
     }
 
+    /**
+     * Reduce a product's stock by the ordered quantity.
+     * The "quantity >= ?" guard prevents the stock going negative when two
+     * buyers order the last units at the same time. When stock reaches zero
+     * the product status is flipped to out_of_stock automatically.
+     * @return true if the stock was reduced, false if there was not enough.
+     */
+    public boolean decreaseStock(int productId, int qty) throws SQLException {
+        String sql = "UPDATE products "
+                   + "SET quantity = quantity - ?, "
+                   + "    status   = CASE WHEN quantity - ? <= 0 "
+                   + "                    THEN 'out_of_stock' ELSE status END "
+                   + "WHERE id = ? AND quantity >= ? AND is_deleted = 0";
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, qty);
+            ps.setInt(2, qty);
+            ps.setInt(3, productId);
+            ps.setInt(4, qty);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
     /** Soft-delete: row stays in DB, just flagged so it is filtered out. */
     public boolean deleteProduct(int id) throws SQLException {
         try (Connection con = DBUtil.getConnection();

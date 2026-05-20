@@ -34,4 +34,9 @@ public class ProductService {
     public boolean updateProduct(ProductModel p) throws SQLException { return productDAO.updateProduct(p); }
     public boolean deleteProduct(int id) throws SQLException { return productDAO.deleteProduct(id); }
     public int countProducts() throws SQLException { return productDAO.countProducts(); }
+
+    /** Reduce stock by the ordered quantity. False if there is not enough stock. */
+    public boolean decreaseStock(int productId, int qty) throws SQLException {
+        return productDAO.decreaseStock(productId, qty);
+    }
 }

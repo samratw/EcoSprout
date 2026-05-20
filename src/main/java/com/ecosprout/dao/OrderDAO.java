@@ -99,6 +99,42 @@ public class OrderDAO {
         return list;
     }
 
+    /** Fetch one order (with product, buyer and vendor names joined). */
+    public OrderModel getById(int id) throws SQLException {
+        String sql = "SELECT o.*, p.name AS product_name, p.vendor_id AS prod_vendor, "
+                   + "u.name AS buyer_name, v.name AS vendor_name "
+                   + "FROM orders o "
+                   + "JOIN products p ON o.product_id = p.id "
+                   + "JOIN users    u ON o.buyer_id   = u.id "
+                   + "JOIN users    v ON p.vendor_id  = v.id "
+                   + "WHERE o.id=? AND o.is_deleted=0";
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                OrderModel o = mapRow(rs);
+                o.setProductName(rs.getString("product_name"));
+                o.setBuyerName(rs.getString("buyer_name"));
+                o.setVendorId(rs.getInt("prod_vendor"));
+                o.setVendorName(rs.getString("vendor_name"));
+                return o;
+            }
+            return null;
+        }
+    }
+
+    /** Update the lifecycle status of an order. */
+    public boolean updateStatus(int orderId, String newStatus) throws SQLException {
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(
+                "UPDATE orders SET status=? WHERE id=? AND is_deleted=0")) {
+            ps.setString(1, newStatus);
+            ps.setInt(2, orderId);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
     /** True if a buyer has placed at least one order for this product. */
     public boolean hasOrdered(int buyerId, int productId) throws SQLException {
         try (Connection con = DBUtil.getConnection();

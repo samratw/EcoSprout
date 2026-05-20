@@ -15,7 +15,8 @@ public class AuthFilter implements Filter {
 
     // Public pages, static folders, and static file suffixes.
     private static final Set<String> PUBLIC_PATHS = new HashSet<>(Arrays.asList(
-        "/", "/index.jsp", "/login", "/register", "/about", "/contact"
+        "/", "/index.jsp", "/login", "/register", "/about", "/contact",
+        "/products", "/product"
     ));
     private static final String[] PUBLIC_PREFIXES = { "/css/", "/js/", "/images/" };
     private static final String[] STATIC_SUFFIXES = {
@@ -51,7 +52,8 @@ public class AuthFilter implements Filter {
         // Role-based access control
         String role = user.getRole();
         if (path.equals("/admin") || path.equals("/manageusers")
-                || path.equals("/viewproducts") || path.equals("/reports")) {
+                || path.equals("/viewproducts") || path.equals("/reports")
+                || path.equals("/managecontacts") || path.equals("/downloadreport")) {
             if (!"admin".equals(role)) { redirectToDashboard(response, ctx, role); return; }
         }
         else if (path.equals("/vendor") || path.equals("/vendororders")) {
@@ -67,7 +69,8 @@ public class AuthFilter implements Filter {
                 redirectToDashboard(response, ctx, role); return;
             }
         }
-        // /profile, /reviews, /product are reachable by any logged-in user.
+        // /profile, /reviews, /product, /orderdetail are reachable by any logged-in user
+        // (per-role checks are done inside the servlet).
 
         chain.doFilter(req, res);
     }

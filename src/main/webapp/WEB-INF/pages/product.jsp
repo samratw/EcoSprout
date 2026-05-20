@@ -106,6 +106,14 @@
                             </c:if>
                         </div>
                     </c:if>
+
+                    <%-- Guests: prompt to log in before ordering --%>
+                    <c:if test="${empty sessionScope.user}">
+                        <div class="pd-actions">
+                            <a href="${ctx}/login" class="btn btn-primary">Login to Order</a>
+                            <a href="${ctx}/register" class="btn btn-outline">Register</a>
+                        </div>
+                    </c:if>
                 </div>
             </div>
 

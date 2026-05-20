@@ -81,9 +81,16 @@
                                 <tbody>
                                     <c:forEach var="o" items="${recentOrders}">
                                         <tr>
-                                            <td>${o.id}</td>
+                                            <td>
+                                                <a href="${ctx}/orderdetail?id=${o.id}">#${o.id}</a>
+                                            </td>
                                             <td><c:out value="${o.buyerName}"/></td>
-                                            <td><c:out value="${o.productName}"/></td>
+                                            <td>
+                                                <a href="${ctx}/orderdetail?id=${o.id}"
+                                                   style="color:inherit; text-decoration:none;">
+                                                    <c:out value="${o.productName}"/>
+                                                </a>
+                                            </td>
                                             <td>${o.quantity}</td>
                                             <td>
                                                 <fmt:formatNumber value="${o.totalPrice}"

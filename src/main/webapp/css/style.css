@@ -983,3 +983,369 @@ footer a {
 @media (max-width: 768px) {
 	.product-detail { grid-template-columns: 1fr; }
 }
+
+
+
+
+/* =========================================================
+   MODERN HOME PAGE UI
+========================================================= */
+
+.hero {
+	min-height: 95vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	padding: 40px 20px;
+	position: relative;
+}
+
+.hero-content {
+	max-width: 850px;
+	animation: fadeUp 1s ease;
+}
+
+.hero-badge {
+	display: inline-block;
+	background: rgba(255,255,255,0.15);
+	padding: 10px 18px;
+	border-radius: 30px;
+	font-size: 0.9rem;
+	margin-bottom: 22px;
+	backdrop-filter: blur(6px);
+	color: white;
+}
+
+.hero h1 {
+	font-size: 4rem;
+	line-height: 1.15;
+	font-weight: 800;
+	margin-bottom: 18px;
+	color: white;
+}
+
+.hero p {
+	font-size: 1.1rem;
+	line-height: 1.8;
+	color: rgba(255,255,255,0.92);
+	max-width: 700px;
+	margin: 0 auto;
+}
+
+.hero-buttons {
+	margin-top: 30px;
+	display: flex;
+	gap: 16px;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+.btn-outline-light {
+	border: 2px solid white;
+	color: white;
+	padding: 12px 24px;
+	border-radius: 30px;
+	text-decoration: none;
+	font-weight: 600;
+	transition: 0.3s;
+}
+
+.btn-outline-light:hover {
+	background: white;
+	color: var(--green-dark);
+}
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.stats-section {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 20px;
+	padding: 60px 40px;
+	background: white;
+}
+
+.stat-box {
+	background: var(--green-pale);
+	padding: 30px;
+	text-align: center;
+	border-radius: 16px;
+	transition: 0.3s;
+	box-shadow: var(--shadow);
+}
+
+.stat-box:hover {
+	transform: translateY(-8px);
+}
+
+.stat-box h2 {
+	font-size: 2.5rem;
+	color: var(--green-dark);
+	margin-bottom: 10px;
+}
+
+.stat-box p {
+	color: var(--text-light);
+	font-weight: 600;
+}
+
+/* =========================================================
+   SECTION TITLE
+========================================================= */
+
+.section-title {
+	text-align: center;
+	margin-bottom: 40px;
+}
+
+.section-title h2 {
+	font-size: 2.2rem;
+	color: var(--green-dark);
+	margin-bottom: 10px;
+}
+
+.section-title p {
+	color: var(--text-light);
+}
+
+.section-title.light h2,
+.section-title.light p {
+	color: white;
+}
+
+/* =========================================================
+   CATEGORY GRID
+========================================================= */
+
+.home-section {
+	padding: 80px 40px;
+	background: #f8fcf9;
+}
+
+.category-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
+	gap: 24px;
+}
+
+.category-card {
+	position: relative;
+	border-radius: 18px;
+	overflow: hidden;
+	box-shadow: var(--shadow);
+	cursor: pointer;
+	height: 320px;
+}
+
+.category-card img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 0.5s;
+}
+
+.category-card:hover img {
+	transform: scale(1.08);
+}
+
+.category-overlay {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(to top,
+	rgba(0,0,0,0.75),
+	rgba(0,0,0,0.2));
+	padding: 24px;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	color: white;
+}
+
+.category-overlay h3 {
+	font-size: 1.5rem;
+	margin-bottom: 8px;
+}
+
+/* =========================================================
+   WHY US
+========================================================= */
+
+.why-us {
+	padding: 90px 40px;
+	background:
+	linear-gradient(rgba(45,106,79,0.93),
+	rgba(45,106,79,0.93)),
+	url('../images/pattern.jpg');
+	background-size: cover;
+}
+
+.why-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit,minmax(240px,1fr));
+	gap: 24px;
+}
+
+.why-card {
+	background: rgba(255,255,255,0.08);
+	padding: 32px;
+	border-radius: 20px;
+	text-align: center;
+	backdrop-filter: blur(5px);
+	color: white;
+	transition: 0.3s;
+}
+
+.why-card:hover {
+	transform: translateY(-8px);
+	background: rgba(255,255,255,0.14);
+}
+
+.why-icon {
+	font-size: 3rem;
+	margin-bottom: 18px;
+}
+
+/* =========================================================
+   BANNER
+========================================================= */
+
+.banner-section {
+	padding: 80px 40px;
+	background: white;
+}
+
+.banner-content {
+	display: grid;
+	grid-template-columns: repeat(auto-fit,minmax(320px,1fr));
+	align-items: center;
+	gap: 40px;
+	max-width: 1200px;
+	margin: auto;
+}
+
+.banner-text span {
+	color: var(--green-mid);
+	font-weight: 700;
+	letter-spacing: 1px;
+}
+
+.banner-text h2 {
+	font-size: 3rem;
+	line-height: 1.2;
+	margin: 18px 0;
+	color: var(--green-dark);
+}
+
+.banner-text p {
+	color: var(--text-light);
+	line-height: 1.8;
+	margin-bottom: 24px;
+}
+
+.banner-image img {
+	width: 100%;
+	max-width: 500px;
+	display: block;
+	margin: auto;
+}
+
+/* =========================================================
+   GALLERY
+========================================================= */
+
+.gallery-section {
+	padding: 80px 40px;
+	background: #f8fcf9;
+}
+
+.gallery-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+	gap: 18px;
+}
+
+.gallery-grid img {
+	width: 100%;
+	height: 260px;
+	object-fit: cover;
+	border-radius: 18px;
+	transition: 0.4s;
+	box-shadow: var(--shadow);
+}
+
+.gallery-grid img:hover {
+	transform: scale(1.04);
+}
+
+/* =========================================================
+   CTA
+========================================================= */
+
+.cta-section {
+	padding: 100px 30px;
+	text-align: center;
+	background:
+	linear-gradient(rgba(45,106,79,0.88),
+	rgba(45,106,79,0.88)),
+	url('../images/cta-bg.jpg') center/cover;
+	color: white;
+}
+
+.cta-section h2 {
+	font-size: 3rem;
+	margin-bottom: 16px;
+}
+
+.cta-section p {
+	max-width: 700px;
+	margin: auto;
+	line-height: 1.8;
+	margin-bottom: 30px;
+}
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+@keyframes fadeUp {
+
+	from {
+		opacity: 0;
+		transform: translateY(30px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:768px){
+
+	.hero h1{
+		font-size: 2.6rem;
+	}
+
+	.banner-text h2{
+		font-size: 2rem;
+	}
+
+	.cta-section h2{
+		font-size: 2rem;
+	}
+
+	.home-section,
+	.gallery-section,
+	.banner-section,
+	.why-us{
+		padding: 60px 20px;
+	}
+
+}
